@@ -1,141 +1,141 @@
-# MCN 管家 — 直播电商代运营管理系统
+# MCN Manager — Live Commerce Operations Management System
 
-> 全栈管理系统：Django 6 + Vue 3 + AI 智能引擎
-> 40个数据模型 · 70+ API接口 · 21个前端页面 · 6大AI功能
-
----
-
-## 功能概览
-
-### 核心业务
-- 数据驾驶舱 / 实时大屏
-- 店铺管理 (多平台: 抖音/快手/淘宝/小红书/拼多多/京东/视频号)
-- 人员管理 (主播/运营/经理/助理)
-- 智能排班 (批量排班/冲突检测)
-- 考勤打卡 (自动迟到检测)
-- 直播业绩 (GMV/订单/转化率)
-- 绩效考核 (S/A/B/C/D评级/奖金计算)
-
-### AI 智能中心
-- GMV 预测 (线性回归+移动平均+季节性调整)
-- 智能排班推荐 (贪心匹配+疲劳惩罚)
-- 主播画像 (五维雷达+AI洞察)
-- 异常检测 (Z-Score+规则引擎)
-- 运营建议 (25条实时告警)
-- 智能匹配 (主播-店铺最佳组合)
-
-### 扩展功能
-- 商品库管理 + 库存预警
-- 直播脚本 + 话术库
-- 任务看板 (四列: 待办/进行中/已完成/阻塞)
-- 消息中心 + 未读提醒
-- 财务中心 (收支/佣金/合同)
-- 营销活动管理
-- 竞品监控 + 粉丝分析
-- 达人/KOL对接
-- 培训管理 + 目标管理
-- 数据导出 (CSV)
-- 操作日志 + 权限管理
+> Full-stack management system: Django 6 + Vue 3 + AI Intelligence Engine
+> 83 data models · 82 ViewSets · 90+ API endpoints · 60 frontend pages · 6 AI capabilities
 
 ---
 
-## 快速开始
+## Feature Overview
 
-### 后端
+### Core Business
+- Data Dashboard / Real-time Analytics Screen
+- Store Management (multi-platform: Douyin / Kuaishou / Taobao / Xiaohongshu / Pinduoduo / JD / WeChat Channels)
+- Personnel Management (streamers / operators / managers / assistants)
+- Smart Scheduling (batch scheduling / conflict detection)
+- Attendance Tracking (automatic late-arrival detection)
+- Live-stream Performance (GMV / orders / conversion rate)
+- Performance Reviews (S/A/B/C/D grading / bonus calculation)
+
+### AI Intelligence Center
+- GMV Forecasting (linear regression + moving average + seasonal adjustment)
+- Smart Scheduling Recommendations (greedy matching + fatigue penalty)
+- Streamer Profiling (five-dimension radar + AI insights)
+- Anomaly Detection (Z-Score + rule engine)
+- Operational Recommendations (25 real-time alerts)
+- Smart Matching (optimal streamer-store combinations)
+
+### Extended Features
+- Product Catalog + Stock Alerts
+- Live-stream Scripts + Talking-points Library
+- Task Board (four columns: To Do / In Progress / Done / Blocked)
+- Notification Center + Unread Reminders
+- Finance Center (income & expenses / commissions / contracts)
+- Marketing Campaign Management
+- Competitor Monitoring + Follower Analysis
+- Influencer / KOL Outreach
+- Training Management + Goal Management
+- Data Export (CSV)
+- Audit Log + Permission Management
+
+---
+
+## Quick Start
+
+### Backend
 
 ```bash
 cd anchor_system
 pip install -r requirements.txt
 python manage.py migrate
-python manage.py seed_data          # 导入示例数据 (可选)
-python manage.py runserver 8000     # 开发模式
+python manage.py seed_data          # Load sample data (optional)
+python manage.py runserver 8000     # Development server
 ```
 
-### 前端
+### Frontend
 
 ```bash
 cd frontend
 npm install
-npm run dev                         # 访问 http://127.0.0.1:5173
+npm run dev                         # Visit http://127.0.0.1:5173
 ```
 
-### 生产构建
+### Production Build
 
 ```bash
-# 后端
+# Backend
 cd anchor_system
 python -m waitress --port=8000 backend.wsgi:application
 
-# 前端
+# Frontend
 cd frontend
-npm run build                       # 产物输出到 dist/
+npm run build                       # Output to dist/
 ```
 
 ---
 
-## 技术架构
+## Technical Architecture
 
 ```
 Vue 3 + Element Plus + ECharts + Pinia + Vue Router
          │  Vite Proxy
 Django 6 + DRF + JWT + Waitress
          │
-Service 层 (缓存 + 缓存失效)
+Service Layer (caching + cache invalidation)
          │
-AI Engine (6大智能算法)
+AI Engine (6 intelligent algorithms)
          │
-SQLite WAL (40个模型 + 20+索引)
+SQLite WAL (83 models + 20+ indexes)
 ```
 
 ---
 
-## 性能指标
+## Performance Metrics
 
-| 指标 | 数值 |
-|------|------|
-| Dashboard 首次 | ~10ms |
-| Dashboard 缓存 | ~2ms |
-| AI Insights 缓存 | ~3ms |
-| 前端 Build | ~2s |
-| 模型总数 | 40 |
-| API 端点 | 70+ |
-| 数据库索引 | 20+ |
-
----
-
-## 文档
-
-| 文档 | 路径 |
-|------|------|
-| 系统架构 | [docs/architecture.md](docs/architecture.md) |
-| API 接口 | [docs/api.md](docs/api.md) |
-| 数据模型 | [docs/models.md](docs/models.md) |
-| AI 引擎 | [docs/ai-engine.md](docs/ai-engine.md) |
-| 前端页面 | [docs/frontend.md](docs/frontend.md) |
-| 部署运维 | [docs/deployment.md](docs/deployment.md) |
+| Metric | Value |
+|--------|-------|
+| Dashboard first load | ~10ms |
+| Dashboard cached | ~2ms |
+| AI Insights cached | ~3ms |
+| Frontend build | ~2s |
+| Total models | 83 |
+| API endpoints | 90+ |
+| Database indexes | 20+ |
 
 ---
 
-## 项目结构
+## Documentation
+
+| Document | Path |
+|----------|------|
+| System Architecture | [docs/architecture.md](architecture.md) |
+| API Reference | [docs/api.md](api.md) |
+| Data Models | [docs/models.md](models.md) |
+| AI Engine | [docs/ai-engine.md](ai-engine.md) |
+| Frontend Pages | [docs/frontend.md](frontend.md) |
+| Deployment & Operations | [docs/deployment.md](deployment.md) |
+
+---
+
+## Project Structure
 
 ```
-anchor_system/          # Django 后端
-├── backend/            # 项目配置
-├── scheduling/         # 主应用 (模型/视图/服务/AI引擎)
-└── db.sqlite3          # SQLite 数据库
+anchor_system/          # Django backend
+├── backend/            # Project configuration
+├── scheduling/         # Main app (models / views / services / AI engine)
+└── db.sqlite3          # SQLite database
 
-frontend/               # Vue 前端
+frontend/               # Vue frontend
 ├── src/
-│   ├── views/          # 21个页面
-│   ├── components/     # 可复用组件
-│   ├── composables/    # 通用Hook
-│   ├── stores/         # Pinia Store
-│   └── router/         # 路由配置
-└── docs/               # 项目文档
+│   ├── views/          # 60 pages
+│   ├── components/     # Reusable components
+│   ├── composables/    # Shared hooks
+│   ├── stores/         # Pinia store
+│   └── router/         # Route configuration
+└── docs/               # Project documentation
 ```
 
 ---
 
-## 默认账号
+## Default Account
 
-种子数据创建的管理员: `admin` / `admin123`
+Admin user created by seed data: `admin` / `admin123`

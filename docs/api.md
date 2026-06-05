@@ -1,69 +1,90 @@
-# MCN Manager API 参考
+# MCN Manager API Reference
 
-> 版本: 1.0 | 基础路径: `/api/` | 认证: JWT / Session | 默认分页: 50 条/页
-
----
-
-## 目录
-
-- [通用约定](#通用约定)
-- [核心模块](#核心模块)
-  - [品牌管理 (brands)](#品牌管理-brands)
-  - [店铺管理 (stores)](#店铺管理-stores)
-  - [团队管理 (teams)](#团队管理-teams)
-  - [直播间管理 (rooms)](#直播间管理-rooms)
-  - [员工管理 (employees)](#员工管理-employees)
-  - [班次管理 (shifts)](#班次管理-shifts)
-  - [排班管理 (schedules)](#排班管理-schedules)
-  - [考勤管理 (attendances)](#考勤管理-attendances)
-  - [请假管理 (leaves)](#请假管理-leaves)
-  - [直播记录 (sessions)](#直播记录-sessions)
-  - [商品销售 (product-sales)](#商品销售-product-sales)
-  - [KPI 配置 (kpi-configs)](#kpi-配置-kpi-configs)
-  - [绩效考核 (reviews)](#绩效考核-reviews)
-  - [数据驾驶舱 (dashboard)](#数据驾驶舱-dashboard)
-- [AI 智能模块](#ai-智能模块)
-- [扩展模块](#扩展模块)
-  - [商品与库存](#商品与库存)
-  - [直播工具](#直播工具)
-  - [任务看板](#任务看板)
-  - [消息中心](#消息中心)
-  - [财务中心](#财务中心)
-  - [佣金管理](#佣金管理)
-  - [合同管理](#合同管理)
-  - [培训管理](#培训管理)
-  - [竞品分析](#竞品分析)
-  - [粉丝分析](#粉丝分析)
-  - [营销活动](#营销活动)
-  - [目标管理](#目标管理)
-  - [操作日志](#操作日志)
-  - [实时大屏](#实时大屏)
-  - [权限管理](#权限管理)
-  - [达人对接](#达人对接)
-  - [数据导出](#数据导出)
+> Version: 1.0 | Base Path: `/api/` | Authentication: JWT / Session | Default Pagination: 50 items/page
 
 ---
 
-## 通用约定
+## Table of Contents
 
-### 认证方式
+- [General Conventions](#general-conventions)
+- [Core Modules](#core-modules)
+  - [Brand Management (brands)](#brand-management-brands)
+  - [Store Management (stores)](#store-management-stores)
+  - [Team Management (teams)](#team-management-teams)
+  - [Live Room Management (rooms)](#live-room-management-rooms)
+  - [Employee Management (employees)](#employee-management-employees)
+  - [Shift Management (shifts)](#shift-management-shifts)
+  - [Schedule Management (schedules)](#schedule-management-schedules)
+  - [Attendance Management (attendances)](#attendance-management-attendances)
+  - [Leave Management (leaves)](#leave-management-leaves)
+  - [Live Sessions (sessions)](#live-sessions-sessions)
+  - [Product Sales (product-sales)](#product-sales-product-sales)
+  - [KPI Configuration (kpi-configs)](#kpi-configuration-kpi-configs)
+  - [Performance Reviews (reviews)](#performance-reviews-reviews)
+  - [Dashboard (dashboard)](#dashboard-dashboard)
+- [AI Module](#ai-module)
+- [Extended Modules](#extended-modules)
+  - [Products & Inventory](#products--inventory)
+  - [Live Streaming Tools](#live-streaming-tools)
+  - [Task Board](#task-board)
+  - [Notification Center](#notification-center)
+  - [Finance Center](#finance-center)
+  - [Commission Management](#commission-management)
+  - [Contract Management](#contract-management)
+  - [Training Management](#training-management)
+  - [Competitor Analysis](#competitor-analysis)
+  - [Fan Analysis](#fan-analysis)
+  - [Marketing Campaigns](#marketing-campaigns)
+  - [Goal Management](#goal-management)
+  - [Operation Logs](#operation-logs)
+  - [Billboard / Live Screen](#billboard--live-screen)
+  - [Permission Management](#permission-management)
+  - [KOL / Influencer Management](#kol--influencer-management)
+  - [Data Export](#data-export)
+- [4th Round Extension Modules](#4th-round-extension-modules)
+  - [Live Interactions](#live-interactions-live-interactions)
+  - [Coupons](#coupons-coupons)
+  - [Flash Sales](#flash-sales-flash-sales)
+  - [Room Decorations](#room-decorations-room-decorations)
+  - [Script Tags](#script-tags-script-tags)
+  - [Sign Contracts](#sign-contracts-sign-contracts)
+  - [Negotiations](#negotiations-negotiations)
+  - [Investments](#investments-investments)
+  - [Contract Ledger](#contract-ledger-contract-ledger)
+  - [Authorizations](#authorizations-authorizations)
+  - [Competitor Rooms](#competitor-rooms-competitor-rooms)
+  - [Traffic Analysis](#traffic-analysis-traffic-analysis)
+  - [User Personas](#user-personas-user-personas)
+  - [A/B Tests](#ab-tests-ab-tests)
+  - [Data Warnings](#data-warnings-data-warnings)
+  - [Settlements](#settlements-settlements)
+  - [Logistics](#logistics-logistics)
+  - [Inventories](#inventories-inventories)
+  - [Return Analysis](#return-analysis-return-analysis)
+  - [Tax Records](#tax-records-tax-records)
 
-系统支持 JWT Token 与 Django Session 两种认证方式。使用 JWT 时，在请求 Header 中携带:
+---
+
+## General Conventions
+
+### Authentication
+
+The system supports both JWT Token and Django Session authentication. When using JWT, include the following in the request header:
 
 ```
 Authorization: Bearer <access_token>
 ```
 
-| Token 类型 | 有效期 |
-|-----------|--------|
-| Access Token | 12 小时 |
-| Refresh Token | 7 天 |
+| Token Type | Validity |
+|-----------|----------|
+| Access Token | 12 hours |
+| Refresh Token | 7 days |
 
-### 请求与响应
+### Request & Response
 
 **Content-Type:** `application/json`
 
-**列表响应 (分页):**
+**List Response (Paginated):**
 
 ```json
 {
@@ -74,7 +95,7 @@ Authorization: Bearer <access_token>
 }
 ```
 
-**单条响应:**
+**Single Item Response:**
 
 ```json
 {
@@ -84,29 +105,29 @@ Authorization: Bearer <access_token>
 }
 ```
 
-**错误响应:**
+**Error Response:**
 
 ```json
 {
-  "detail": "错误描述信息"
+  "detail": "Error description message"
 }
 ```
 
-### HTTP 状态码
+### HTTP Status Codes
 
-| 状态码 | 含义 |
+| Status Code | Meaning |
 |--------|------|
-| 200 | 请求成功 |
-| 201 | 创建成功 |
-| 400 | 请求参数错误 / 业务校验失败 |
-| 401 | 未认证 |
-| 403 | 无权限 |
-| 404 | 资源不存在 |
-| 429 | 请求频率超限 |
+| 200 | Request successful |
+| 201 | Created successfully |
+| 400 | Bad request / Business validation failed |
+| 401 | Not authenticated |
+| 403 | Permission denied |
+| 404 | Resource not found |
+| 429 | Rate limit exceeded |
 
-### 限流策略
+### Rate Limiting
 
-匿名用户: **100 次/分钟**，超出返回 429 状态码。可在 `settings.py` 中调整:
+Anonymous users: **100 requests/minute**. Exceeding this returns a 429 status code. Configurable in `settings.py`:
 
 ```python
 REST_FRAMEWORK = {
@@ -116,11 +137,11 @@ REST_FRAMEWORK = {
 }
 ```
 
-### 性能约定
+### Performance Conventions
 
-所有 API 响应包含 `X-Response-Time` 响应头 (单位: 毫秒)。各接口典型性能:
+All API responses include the `X-Response-Time` response header (in milliseconds). Typical performance by endpoint:
 
-| 端点 | 首次 | 缓存命中 |
+| Endpoint | First Request | Cache Hit |
 |------|------|----------|
 | Dashboard Overview | ~10ms | ~2ms |
 | Store Overview | ~5ms | ~2.5ms |
@@ -131,54 +152,54 @@ REST_FRAMEWORK = {
 
 ---
 
-## 核心模块
+## Core Modules
 
-### 品牌管理 `brands`
+### Brand Management `brands`
 
-标准 RESTful CRUD 接口。
+Standard RESTful CRUD endpoints.
 
-| 方法 | 路径 | 说明 |
+| Method | Path | Description |
 |------|------|------|
-| GET | `/api/brands/` | 品牌列表 |
-| POST | `/api/brands/` | 创建品牌 |
-| GET | `/api/brands/{id}/` | 品牌详情 |
-| PUT | `/api/brands/{id}/` | 全量更新 |
-| DELETE | `/api/brands/{id}/` | 删除品牌 |
+| GET | `/api/brands/` | Brand list |
+| POST | `/api/brands/` | Create brand |
+| GET | `/api/brands/{id}/` | Brand detail |
+| PUT | `/api/brands/{id}/` | Full update |
+| DELETE | `/api/brands/{id}/` | Delete brand |
 
-**数据字段:**
+**Data Fields:**
 
-| 字段 | 类型 | 必填 | 说明 |
+| Field | Type | Required | Description |
 |------|------|:----:|------|
-| name | string | 是 | 品牌名 (唯一) |
-| industry | string | 否 | 所属行业 |
-| contact | string | 否 | 联系人 |
-| phone | string | 否 | 联系电话 |
-| logo | url | 否 | 品牌 Logo URL |
-| remark | string | 否 | 备注信息 |
-| created_at | datetime | -- | 创建时间 (自动生成) |
+| name | string | Yes | Brand name (unique) |
+| industry | string | No | Industry |
+| contact | string | No | Contact person |
+| phone | string | No | Contact phone |
+| logo | url | No | Brand logo URL |
+| remark | string | No | Remarks |
+| created_at | datetime | -- | Created timestamp (auto-generated) |
 
-**创建请求示例:**
+**Create Request Example:**
 
 ```json
 {
-  "name": "花西子",
-  "industry": "美妆",
-  "contact": "张经理",
+  "name": "Florasis",
+  "industry": "Beauty",
+  "contact": "Manager Zhang",
   "phone": "13800001111",
-  "logo": "https://cdn.example.com/brands/huaxizi.png"
+  "logo": "https://cdn.example.com/brands/florasis.png"
 }
 ```
 
-**响应示例:**
+**Response Example:**
 
 ```json
 {
   "id": 1,
-  "name": "花西子",
-  "industry": "美妆",
-  "contact": "张经理",
+  "name": "Florasis",
+  "industry": "Beauty",
+  "contact": "Manager Zhang",
   "phone": "13800001111",
-  "logo": "https://cdn.example.com/brands/huaxizi.png",
+  "logo": "https://cdn.example.com/brands/florasis.png",
   "remark": "",
   "created_at": "2026-05-01T10:00:00+08:00"
 }
@@ -186,31 +207,31 @@ REST_FRAMEWORK = {
 
 ---
 
-### 店铺管理 `stores`
+### Store Management `stores`
 
-| 方法 | 路径 | 说明 |
+| Method | Path | Description |
 |------|------|------|
-| GET | `/api/stores/` | 店铺列表 (含统计) |
-| POST | `/api/stores/` | 创建店铺 |
-| GET | `/api/stores/{id}/` | 店铺详情 |
-| PUT | `/api/stores/{id}/` | 全量更新 |
-| DELETE | `/api/stores/{id}/` | 删除店铺 |
-| GET | `/api/stores/overview/` | 店铺运营总览 |
+| GET | `/api/stores/` | Store list (with statistics) |
+| POST | `/api/stores/` | Create store |
+| GET | `/api/stores/{id}/` | Store detail |
+| PUT | `/api/stores/{id}/` | Full update |
+| DELETE | `/api/stores/{id}/` | Delete store |
+| GET | `/api/stores/overview/` | Store operations overview |
 
-**列表查询参数:**
+**List Query Parameters:**
 
-| 参数 | 类型 | 说明 |
+| Parameter | Type | Description |
 |------|------|------|
-| platform | string | 平台筛选: `douyin` / `kuaishou` / `taobao` / `xiaohongshu` / `pdd` / `jd` / `video_account` |
-| status | string | 状态筛选: `active` / `paused` / `closed` |
-| brand_id | int | 按品牌筛选 |
-| kw | string | 店铺名模糊搜索 |
+| platform | string | Platform filter: `douyin` / `kuaishou` / `taobao` / `xiaohongshu` / `pdd` / `jd` / `video_account` |
+| status | string | Status filter: `active` / `paused` / `closed` |
+| brand_id | int | Filter by brand |
+| kw | string | Fuzzy search by store name |
 
-列表响应额外包含 `room_count` (直播间数) 和 `employee_count` (关联员工数) 统计字段。
+List response additionally includes `room_count` (number of live rooms) and `employee_count` (associated employees) aggregate fields.
 
-**店铺运营总览 `overview`:**
+**Store Operations Overview `overview`:**
 
-按 GMV 降序返回所有店铺的运营数据汇总，缓存 120 秒。
+Returns aggregated operational data for all stores, sorted by GMV descending, cached for 120 seconds.
 
 ```
 GET /api/stores/overview/?start=2026-05-01&end=2026-05-31
@@ -220,7 +241,7 @@ GET /api/stores/overview/?start=2026-05-01&end=2026-05-31
 [
   {
     "id": 1,
-    "name": "花西子抖音旗舰店",
+    "name": "Florasis Douyin Flagship Store",
     "platform": "douyin",
     "status": "active",
     "monthly_target": "50.00",
@@ -232,15 +253,15 @@ GET /api/stores/overview/?start=2026-05-01&end=2026-05-31
 ]
 ```
 
-**创建请求示例:**
+**Create Request Example:**
 
 ```json
 {
-  "name": "花西子抖音旗舰店",
+  "name": "Florasis Douyin Flagship Store",
   "platform": "douyin",
   "brand": 1,
   "store_url": "https://douyin.com/shop/xxx",
-  "category": "美妆",
+  "category": "Beauty",
   "monthly_target": "50.00",
   "status": "active"
 }
@@ -248,65 +269,65 @@ GET /api/stores/overview/?start=2026-05-01&end=2026-05-31
 
 ---
 
-### 团队管理 `teams`
+### Team Management `teams`
 
-| 方法 | 路径 | 说明 |
+| Method | Path | Description |
 |------|------|------|
-| GET | `/api/teams/` | 团队列表 |
-| POST | `/api/teams/` | 创建团队 |
-| GET | `/api/teams/{id}/` | 团队详情 |
-| PUT | `/api/teams/{id}/` | 全量更新 |
-| DELETE | `/api/teams/{id}/` | 删除团队 |
+| GET | `/api/teams/` | Team list |
+| POST | `/api/teams/` | Create team |
+| GET | `/api/teams/{id}/` | Team detail |
+| PUT | `/api/teams/{id}/` | Full update |
+| DELETE | `/api/teams/{id}/` | Delete team |
 
-列表响应额外包含 `member_count` (成员数) 聚合字段。
+List response additionally includes `member_count` (member count) aggregate field.
 
 ---
 
-### 直播间管理 `rooms`
+### Live Room Management `rooms`
 
-| 方法 | 路径 | 说明 |
+| Method | Path | Description |
 |------|------|------|
-| GET | `/api/rooms/` | 直播间列表 |
-| POST | `/api/rooms/` | 创建直播间 |
-| GET | `/api/rooms/{id}/` | 直播间详情 |
-| PUT | `/api/rooms/{id}/` | 全量更新 |
-| DELETE | `/api/rooms/{id}/` | 删除直播间 |
+| GET | `/api/rooms/` | Live room list |
+| POST | `/api/rooms/` | Create live room |
+| GET | `/api/rooms/{id}/` | Live room detail |
+| PUT | `/api/rooms/{id}/` | Full update |
+| DELETE | `/api/rooms/{id}/` | Delete live room |
 
-**查询参数:** `store_id` -- 按所属店铺筛选。
+**Query Parameters:** `store_id` -- filter by parent store.
 
-**数据字段:**
+**Data Fields:**
 
-| 字段 | 类型 | 必填 | 说明 |
+| Field | Type | Required | Description |
 |------|------|:----:|------|
-| name | string | 是 | 直播间名称 |
-| store | int | 是 | 所属店铺 ID |
-| room_id | string | 否 | 平台房间号 |
-| is_active | boolean | 否 | 是否启用 (默认 true) |
+| name | string | Yes | Live room name |
+| store | int | Yes | Parent store ID |
+| room_id | string | No | Platform room ID |
+| is_active | boolean | No | Whether active (default true) |
 
 ---
 
-### 员工管理 `employees`
+### Employee Management `employees`
 
-| 方法 | 路径 | 说明 |
+| Method | Path | Description |
 |------|------|------|
-| GET | `/api/employees/` | 员工列表 (含档案) |
-| POST | `/api/employees/` | 创建员工 |
-| GET | `/api/employees/{id}/` | 员工详情 |
-| PUT | `/api/employees/{id}/` | 全量更新 |
-| DELETE | `/api/employees/{id}/` | 删除员工 |
-| GET | `/api/employees/stats/` | 员工统计概览 |
+| GET | `/api/employees/` | Employee list (with profiles) |
+| POST | `/api/employees/` | Create employee |
+| GET | `/api/employees/{id}/` | Employee detail |
+| PUT | `/api/employees/{id}/` | Full update |
+| DELETE | `/api/employees/{id}/` | Delete employee |
+| GET | `/api/employees/stats/` | Employee statistics overview |
 
-**列表查询参数:**
+**List Query Parameters:**
 
-| 参数 | 类型 | 说明 |
+| Parameter | Type | Description |
 |------|------|------|
-| role | string | 角色筛选: `admin` / `manager` / `operator` / `anchor` / `assistant` |
-| store_id | int | 按负责店铺筛选 |
-| team_id | int | 按所属小组筛选 |
-| is_active | string | 在职状态: `true` / `false` |
-| kw | string | 姓名或手机号模糊搜索 |
+| role | string | Role filter: `admin` / `manager` / `operator` / `anchor` / `assistant` |
+| store_id | int | Filter by assigned store |
+| team_id | int | Filter by team |
+| is_active | string | Active status: `true` / `false` |
+| kw | string | Fuzzy search by name or phone number |
 
-**员工统计 `stats`:**
+**Employee Statistics `stats`:**
 
 ```json
 {
@@ -322,11 +343,11 @@ GET /api/stores/overview/?start=2026-05-01&end=2026-05-31
 }
 ```
 
-**创建请求示例:**
+**Create Request Example:**
 
 ```json
 {
-  "name": "李佳琦",
+  "name": "Li Jiaqi",
   "role": "anchor",
   "phone": "13900001111",
   "team": 1,
@@ -336,62 +357,62 @@ GET /api/stores/overview/?start=2026-05-01&end=2026-05-31
 }
 ```
 
-响应包含嵌套的 `anchor_profile` 对象 (主播专属字段) 和 `store_names` 数组。
+Response includes nested `anchor_profile` object (anchor-specific fields) and `store_names` array.
 
 ---
 
-### 班次管理 `shifts`
+### Shift Management `shifts`
 
-| 方法 | 路径 | 说明 |
+| Method | Path | Description |
 |------|------|------|
-| GET | `/api/shifts/` | 班次列表 |
-| POST | `/api/shifts/` | 创建班次 |
-| GET | `/api/shifts/{id}/` | 班次详情 |
-| PUT | `/api/shifts/{id}/` | 全量更新 |
-| DELETE | `/api/shifts/{id}/` | 删除班次 |
+| GET | `/api/shifts/` | Shift list |
+| POST | `/api/shifts/` | Create shift |
+| GET | `/api/shifts/{id}/` | Shift detail |
+| PUT | `/api/shifts/{id}/` | Full update |
+| DELETE | `/api/shifts/{id}/` | Delete shift |
 
-**数据字段:**
+**Data Fields:**
 
-| 字段 | 类型 | 必填 | 说明 |
+| Field | Type | Required | Description |
 |------|------|:----:|------|
-| name | string | 是 | 班次名称 |
-| type | string | 否 | 班次类型: `morning` / `afternoon` / `evening` / `night` / `custom` |
-| start_time | time | 是 | 开始时间 |
-| end_time | time | 是 | 结束时间 |
-| color | string | 否 | 前端显示颜色 (默认 `#409EFF`) |
-| description | string | 否 | 描述 |
-| late_minutes | int | 否 | 迟到容忍分钟数 (默认 10) |
+| name | string | Yes | Shift name |
+| type | string | No | Shift type: `morning` / `afternoon` / `evening` / `night` / `custom` |
+| start_time | time | Yes | Start time |
+| end_time | time | Yes | End time |
+| color | string | No | Frontend display color (default `#409EFF`) |
+| description | string | No | Description |
+| late_minutes | int | No | Late tolerance in minutes (default 10) |
 
-响应额外包含 `type_display` 和 `time_range` 字段。
+Response additionally includes `type_display` and `time_range` fields.
 
 ---
 
-### 排班管理 `schedules`
+### Schedule Management `schedules`
 
-| 方法 | 路径 | 说明 |
+| Method | Path | Description |
 |------|------|------|
-| GET | `/api/schedules/` | 排班列表 |
-| POST | `/api/schedules/` | 创建排班 (含校验) |
-| GET | `/api/schedules/{id}/` | 排班详情 |
-| PUT | `/api/schedules/{id}/` | 全量更新 |
-| DELETE | `/api/schedules/{id}/` | 删除排班 |
-| GET | `/api/schedules/weekly/` | 周排班视图 |
-| POST | `/api/schedules/batch_create/` | 批量创建 |
+| GET | `/api/schedules/` | Schedule list |
+| POST | `/api/schedules/` | Create schedule (with validation) |
+| GET | `/api/schedules/{id}/` | Schedule detail |
+| PUT | `/api/schedules/{id}/` | Full update |
+| DELETE | `/api/schedules/{id}/` | Delete schedule |
+| GET | `/api/schedules/weekly/` | Weekly schedule view |
+| POST | `/api/schedules/batch_create/` | Batch create |
 
-**列表查询参数:**
+**List Query Parameters:**
 
-| 参数 | 类型 | 说明 |
+| Parameter | Type | Description |
 |------|------|------|
-| start | date | 起始日期 (YYYY-MM-DD) |
-| end | date | 截止日期 |
-| store_id | int | 店铺筛选 |
-| employee_id | int | 员工筛选 |
-| role | string | 按员工角色筛选 |
-| status | string | 排班状态: `scheduled` / `checked_in` / `completed` / `cancelled` / `absent` |
+| start | date | Start date (YYYY-MM-DD) |
+| end | date | End date |
+| store_id | int | Store filter |
+| employee_id | int | Employee filter |
+| role | string | Filter by employee role |
+| status | string | Schedule status: `scheduled` / `checked_in` / `completed` / `cancelled` / `absent` |
 
-**创建排班:**
+**Create Schedule:**
 
-创建时自动校验: 重复排班检测 + 同一时段冲突检测。校验失败返回 400。
+Auto-validates on creation: duplicate schedule detection + time slot conflict detection. Returns 400 on validation failure.
 
 ```json
 {
@@ -400,17 +421,17 @@ GET /api/stores/overview/?start=2026-05-01&end=2026-05-31
   "store": 1,
   "room": 1,
   "date": "2026-06-05",
-  "note": "618备战"
+  "note": "618 campaign prep"
 }
 ```
 
-**周排班视图 `weekly`:**
+**Weekly Schedule View `weekly`:**
 
 ```
 GET /api/schedules/weekly/?start=2026-06-01
 ```
 
-返回指定日期所在周 (共 7 天) 的所有排班数据:
+Returns all schedule data for the week containing the specified date (7 days total):
 
 ```json
 {
@@ -420,33 +441,33 @@ GET /api/schedules/weekly/?start=2026-06-01
     {
       "id": 1,
       "employee": 5,
-      "employee_name": "李佳琦",
+      "employee_name": "Li Jiaqi",
       "employee_role": "anchor",
       "shift": 1,
-      "shift_name": "早班",
+      "shift_name": "Morning Shift",
       "shift_color": "#409EFF",
       "start_time": "08:00:00",
       "end_time": "14:00:00",
       "store": 1,
-      "store_name": "旗舰店",
+      "store_name": "Flagship Store",
       "room": 1,
-      "room_name": "1号厅",
+      "room_name": "Studio 1",
       "date": "2026-06-01",
       "status": "scheduled",
-      "status_display": "已排班",
+      "status_display": "Scheduled",
       "note": ""
     }
   ]
 }
 ```
 
-**批量创建 `batch_create`:**
+**Batch Create `batch_create`:**
 
 ```
 POST /api/schedules/batch_create/
 ```
 
-请求体为数组格式，每条记录独立校验:
+Request body is an array format; each record is validated independently:
 
 ```json
 [
@@ -462,61 +483,61 @@ POST /api/schedules/batch_create/
     {"employee": 5, "shift": 1, "store": 1, "date": "2026-06-01", ...}
   ],
   "errors": [
-    {"index": 1, "error": "该员工在此时间段已有其他排班，时间冲突"}
+    {"index": 1, "error": "This employee already has another schedule in this time slot, time conflict"}
   ]
 }
 ```
 
 ---
 
-### 考勤管理 `attendances`
+### Attendance Management `attendances`
 
-| 方法 | 路径 | 说明 |
+| Method | Path | Description |
 |------|------|------|
-| GET | `/api/attendances/` | 考勤记录列表 |
-| POST | `/api/attendances/clock_in/` | 上班打卡 |
-| POST | `/api/attendances/clock_out/` | 下班打卡 |
-| GET | `/api/attendances/summary/` | 考勤汇总统计 |
+| GET | `/api/attendances/` | Attendance record list |
+| POST | `/api/attendances/clock_in/` | Clock in |
+| POST | `/api/attendances/clock_out/` | Clock out |
+| GET | `/api/attendances/summary/` | Attendance summary statistics |
 
-**列表查询参数:**
+**List Query Parameters:**
 
-| 参数 | 类型 | 说明 |
+| Parameter | Type | Description |
 |------|------|------|
-| employee_id | int | 员工筛选 |
-| start | date | 起始日期 |
-| end | date | 截止日期 |
-| result | string | 考勤结果: `normal` / `late` / `early` / `absent` / `leave` / `overtime` |
+| employee_id | int | Employee filter |
+| start | date | Start date |
+| end | date | End date |
+| result | string | Attendance result: `normal` / `late` / `early` / `absent` / `leave` / `overtime` |
 
-**上班打卡 `clock_in`:**
+**Clock In `clock_in`:**
 
 ```json
 {
   "employee_id": 5,
   "schedule_id": 12,
-  "location": "公司总部A座",
+  "location": "HQ Building A",
   "photo": "https://cdn.example.com/clock_in.jpg"
 }
 ```
 
-打卡逻辑:
-1. 通过 `schedule_id` 或 `employee_id` 匹配当日排班
-2. 对比班次开始时间与打卡时间
-3. 超出容忍分钟数 (班次 `late_minutes`) 则标记 `late`，否则 `normal`
-4. 自动将排班状态更新为 `checked_in`
+Clock-in logic:
+1. Match today's schedule via `schedule_id` or `employee_id`
+2. Compare shift start time with clock-in time
+3. If exceeding tolerance minutes (shift `late_minutes`), mark as `late`; otherwise `normal`
+4. Automatically update schedule status to `checked_in`
 
-**下班打卡 `clock_out`:**
+**Clock Out `clock_out`:**
 
 ```json
 {
   "employee_id": 5,
-  "location": "公司总部A座",
+  "location": "HQ Building A",
   "photo": ""
 }
 ```
 
-打卡逻辑: 超过班次结束时间标记为 `overtime`，否则 `normal`。同时将排班状态更新为 `completed`。
+Clock-out logic: If past shift end time, mark as `overtime`; otherwise `normal`. Also updates schedule status to `completed`.
 
-**考勤汇总 `summary`:**
+**Attendance Summary `summary`:**
 
 ```
 GET /api/attendances/summary/?start=2026-05-01&end=2026-05-31
@@ -533,7 +554,7 @@ GET /api/attendances/summary/?start=2026-05-01&end=2026-05-31
     "overtime": 7
   },
   "top_late": [
-    {"employee_id": 5, "employee__name": "张三", "late": 8, "normal": 22}
+    {"employee_id": 5, "employee__name": "Zhang San", "late": 8, "normal": 22}
   ],
   "start": "2026-05-01",
   "end": "2026-05-31"
@@ -542,50 +563,50 @@ GET /api/attendances/summary/?start=2026-05-01&end=2026-05-31
 
 ---
 
-### 请假管理 `leaves`
+### Leave Management `leaves`
 
-| 方法 | 路径 | 说明 |
+| Method | Path | Description |
 |------|------|------|
-| GET | `/api/leaves/` | 请假列表 |
-| POST | `/api/leaves/` | 创建请假 |
-| GET | `/api/leaves/{id}/` | 请假详情 |
-| PUT | `/api/leaves/{id}/` | 全量更新 |
-| DELETE | `/api/leaves/{id}/` | 删除请假 |
-| POST | `/api/leaves/{id}/approve/` | 审批通过 |
-| POST | `/api/leaves/{id}/reject/` | 审批拒绝 |
+| GET | `/api/leaves/` | Leave request list |
+| POST | `/api/leaves/` | Create leave request |
+| GET | `/api/leaves/{id}/` | Leave detail |
+| PUT | `/api/leaves/{id}/` | Full update |
+| DELETE | `/api/leaves/{id}/` | Delete leave request |
+| POST | `/api/leaves/{id}/approve/` | Approve leave |
+| POST | `/api/leaves/{id}/reject/` | Reject leave |
 
-**查询参数:** `status` (`pending` / `approved` / `rejected`), `employee_id`
+**Query Parameters:** `status` (`pending` / `approved` / `rejected`), `employee_id`
 
-**请假类型:** `personal` (事假) / `sick` (病假) / `annual` (年假) / `marriage` (婚假) / `bereavement` (丧假) / `maternity` (产假)
+**Leave Types:** `personal` / `sick` / `annual` / `marriage` / `bereavement` / `maternity`
 
-**审批通过:**
+**Approve Leave:**
 
 ```json
 {
-  "approver": "管理员",
-  "remark": "同意，注意休息"
+  "approver": "Admin",
+  "remark": "Approved, please rest well"
 }
 ```
 
 ---
 
-### 直播记录 `sessions`
+### Live Sessions `sessions`
 
-| 方法 | 路径 | 说明 |
+| Method | Path | Description |
 |------|------|------|
-| GET | `/api/sessions/` | 直播记录列表 |
-| POST | `/api/sessions/` | 创建直播记录 |
-| GET | `/api/sessions/{id}/` | 直播记录详情 |
-| PUT | `/api/sessions/{id}/` | 全量更新 |
-| DELETE | `/api/sessions/{id}/` | 删除直播记录 |
-| GET | `/api/sessions/daily_gmv/` | 每日 GMV 统计 |
-| GET | `/api/sessions/top_anchors/` | 主播 GMV 排行 |
+| GET | `/api/sessions/` | Live session list |
+| POST | `/api/sessions/` | Create live session |
+| GET | `/api/sessions/{id}/` | Session detail |
+| PUT | `/api/sessions/{id}/` | Full update |
+| DELETE | `/api/sessions/{id}/` | Delete live session |
+| GET | `/api/sessions/daily_gmv/` | Daily GMV statistics |
+| GET | `/api/sessions/top_anchors/` | Anchor GMV ranking |
 
-**列表查询参数:** `employee_id`, `store_id`, `start`, `end`
+**List Query Parameters:** `employee_id`, `store_id`, `start`, `end`
 
-响应包含嵌套的 `products` 数组 (本场商品销售明细)。
+Response includes nested `products` array (product sales details for the session).
 
-**每日 GMV `daily_gmv`:**
+**Daily GMV `daily_gmv`:**
 
 ```
 GET /api/sessions/daily_gmv/?start=2026-05-01&end=2026-05-31&store_id=1
@@ -598,7 +619,7 @@ GET /api/sessions/daily_gmv/?start=2026-05-01&end=2026-05-31&store_id=1
 ]
 ```
 
-**主播排行 `top_anchors`:**
+**Top Anchors `top_anchors`:**
 
 ```
 GET /api/sessions/top_anchors/?start=2026-05-01&end=2026-05-31&limit=10
@@ -608,7 +629,7 @@ GET /api/sessions/top_anchors/?start=2026-05-01&end=2026-05-31&limit=10
 [
   {
     "employee_id": 5,
-    "employee__name": "李佳琦",
+    "employee__name": "Li Jiaqi",
     "gmv": 1280000.00,
     "orders": 5600,
     "hours": 7200,
@@ -619,46 +640,46 @@ GET /api/sessions/top_anchors/?start=2026-05-01&end=2026-05-31&limit=10
 
 ---
 
-### 商品销售 `product-sales`
+### Product Sales `product-sales`
 
-标准 CRUD，关联于直播场次。
+Standard CRUD, associated with live sessions.
 
-| 方法 | 路径 | 说明 |
+| Method | Path | Description |
 |------|------|------|
-| GET | `/api/product-sales/` | 销售明细列表 |
-| POST | `/api/product-sales/` | 创建销售明细 |
-| GET | `/api/product-sales/{id}/` | 销售明细详情 |
-| PUT | `/api/product-sales/{id}/` | 全量更新 |
-| DELETE | `/api/product-sales/{id}/` | 删除销售明细 |
+| GET | `/api/product-sales/` | Sales detail list |
+| POST | `/api/product-sales/` | Create sales record |
+| GET | `/api/product-sales/{id}/` | Sales detail |
+| PUT | `/api/product-sales/{id}/` | Full update |
+| DELETE | `/api/product-sales/{id}/` | Delete sales record |
 
-**数据字段:** `session` (直播场次 ID), `product_name`, `sku`, `price`, `quantity`, `gmv`, `commission`
+**Data Fields:** `session` (live session ID), `product_name`, `sku`, `price`, `quantity`, `gmv`, `commission`
 
 ---
 
-### KPI 配置 `kpi-configs`
+### KPI Configuration `kpi-configs`
 
-| 方法 | 路径 | 说明 |
+| Method | Path | Description |
 |------|------|------|
-| GET | `/api/kpi-configs/` | KPI 配置列表 |
-| POST | `/api/kpi-configs/` | 创建配置 |
-| GET | `/api/kpi-configs/{id}/` | 配置详情 |
-| PUT | `/api/kpi-configs/{id}/` | 全量更新 |
-| DELETE | `/api/kpi-configs/{id}/` | 删除配置 |
+| GET | `/api/kpi-configs/` | KPI configuration list |
+| POST | `/api/kpi-configs/` | Create configuration |
+| GET | `/api/kpi-configs/{id}/` | Configuration detail |
+| PUT | `/api/kpi-configs/{id}/` | Full update |
+| DELETE | `/api/kpi-configs/{id}/` | Delete configuration |
 
-**指标类型:** `gmv` / `orders` / `hours` / `followers` / `conversion` / `attendance`
+**Metric Types:** `gmv` / `orders` / `hours` / `followers` / `conversion` / `attendance`
 
 ---
 
-### 绩效考核 `reviews`
+### Performance Reviews `reviews`
 
-| 方法 | 路径 | 说明 |
+| Method | Path | Description |
 |------|------|------|
-| GET | `/api/reviews/` | 考核列表 |
-| POST | `/api/reviews/calculate/` | 自动计算考核 |
+| GET | `/api/reviews/` | Review list |
+| POST | `/api/reviews/calculate/` | Auto-calculate review |
 
-**查询参数:** `period` (如 `2026-06`), `employee_id`, `role`, `level` (S/A/B/C/D)
+**Query Parameters:** `period` (e.g., `2026-06`), `employee_id`, `role`, `level` (S/A/B/C/D)
 
-**自动计算 `calculate`:**
+**Auto-Calculate `calculate`:**
 
 ```json
 {
@@ -667,27 +688,27 @@ GET /api/sessions/top_anchors/?start=2026-05-01&end=2026-05-31&limit=10
 }
 ```
 
-评分公式: GMV 完成率 x 60% + 出勤率 x 20% + 直播时长 x 10% + 订单数 x 10% = 综合得分
+Scoring formula: GMV completion rate x 60% + Attendance rate x 20% + Live streaming hours x 10% + Order count x 10% = Overall score
 
-| 得分区间 | 等级 |
+| Score Range | Grade |
 |---------|------|
-| >= 90 | S (优秀) |
-| >= 80 | A (良好) |
-| >= 60 | B (合格) |
-| >= 40 | C (待改进) |
-| < 40 | D (不合格) |
+| >= 90 | S (Excellent) |
+| >= 80 | A (Good) |
+| >= 60 | B (Satisfactory) |
+| >= 40 | C (Needs Improvement) |
+| < 40 | D (Unsatisfactory) |
 
-绩效奖金 = `max(0, (score - 60) / 40) x base_salary` (仅 60 分以上有奖金)
+Performance bonus = `max(0, (score - 60) / 40) x base_salary` (only scores above 60 receive bonus)
 
 ---
 
-### 数据驾驶舱 `dashboard`
+### Dashboard `dashboard`
 
-| 方法 | 路径 | 说明 |
+| Method | Path | Description |
 |------|------|------|
-| GET | `/api/dashboard/overview/` | 驾驶舱总览 |
+| GET | `/api/dashboard/overview/` | Dashboard overview |
 
-缓存 60 秒，响应结构:
+Cached for 60 seconds. Response structure:
 
 ```json
 {
@@ -710,54 +731,54 @@ GET /api/sessions/top_anchors/?start=2026-05-01&end=2026-05-31&limit=10
     {"platform": "douyin", "gmv": 2500000.00, "sessions": 200}
   ],
   "top_anchors": [
-    {"employee_id": 5, "employee__name": "李佳琦", "gmv": 580000.00, "sessions": 12}
+    {"employee_id": 5, "employee__name": "Li Jiaqi", "gmv": 580000.00, "sessions": 12}
   ]
 }
 ```
 
 ---
 
-## AI 智能模块
+## AI Module
 
-所有 AI 接口注册在 `/api/ai/` 路径下，使用 GET 方法，结果根据参数哈希缓存 120~180 秒。
+All AI endpoints are registered under the `/api/ai/` path, using GET method. Results are cached for 120-180 seconds based on parameter hash.
 
-| 路径 | 说明 | 核心参数 | 缓存 |
+| Path | Description | Key Parameters | Cache |
 |------|------|----------|------|
-| `/api/ai/predict/` | GMV 预测 | `days` (1-30), `store_id`, `employee_id` | 120s |
-| `/api/ai/schedule/` | 智能排班推荐 | `date` (YYYY-MM-DD), `store_id` | 120s |
-| `/api/ai/anchor/` | 主播画像分析 | `employee_id` (必填) | 180s |
-| `/api/ai/anomaly/` | 异常数据检测 | `days` (1-30) | 120s |
-| `/api/ai/insights/` | 运营建议引擎 | 无参数 | 120s |
-| `/api/ai/match/` | 主播-店铺匹配 | `store_id` | 180s |
+| `/api/ai/predict/` | GMV prediction | `days` (1-30), `store_id`, `employee_id` | 120s |
+| `/api/ai/schedule/` | Smart scheduling recommendation | `date` (YYYY-MM-DD), `store_id` | 120s |
+| `/api/ai/anchor/` | Anchor profile analysis | `employee_id` (required) | 180s |
+| `/api/ai/anomaly/` | Anomaly data detection | `days` (1-30) | 120s |
+| `/api/ai/insights/` | Operations insight engine | No parameters | 120s |
+| `/api/ai/match/` | Anchor-store matching | `store_id` | 180s |
 
-算法原理、公式推导和完整响应结构请参阅 [AI 引擎文档](ai-engine.md)。
+For algorithm details, formula derivations, and full response structures, see the [AI Engine Document](ai-engine.md).
 
 ---
 
-## 扩展模块
+## Extended Modules
 
-### 商品与库存
+### Products & Inventory
 
-| 方法 | 路径 | 说明 |
+| Method | Path | Description |
 |------|------|------|
-| GET/POST | `/api/product-categories/` | 商品类目 CRUD |
-| GET/POST | `/api/products/` | 商品 CRUD |
-| GET | `/api/products/low_stock/` | 低库存商品列表 |
-| GET/POST | `/api/inventory-alerts/` | 库存预警规则 CRUD |
-| GET | `/api/inventory-alerts/triggered/` | 已触发的预警列表 |
+| GET/POST | `/api/product-categories/` | Product category CRUD |
+| GET/POST | `/api/products/` | Product CRUD |
+| GET | `/api/products/low_stock/` | Low stock product list |
+| GET/POST | `/api/inventory-alerts/` | Inventory alert rules CRUD |
+| GET | `/api/inventory-alerts/triggered/` | Triggered alerts list |
 
-**商品查询参数:** `status` (active/inactive/draft), `category_id`, `kw` (名称或 SKU 搜索)
+**Product Query Parameters:** `status` (active/inactive/draft), `category_id`, `kw` (name or SKU search)
 
-**低库存商品:** 返回库存 <= 10 且状态为 `active` 的商品列表。
+**Low Stock Products:** Returns products with stock <= 10 and status `active`.
 
-**已触发预警:** 遍历所有启用的预警规则，返回当前库存 <= 阈值的商品:
+**Triggered Alerts:** Iterates all enabled alert rules and returns products with current stock <= threshold:
 
 ```json
 [
   {
     "id": 1,
     "product_id": 15,
-    "product_name": "花西子蜜粉",
+    "product_name": "Florasis Loose Powder",
     "stock": 3,
     "threshold": 10
   }
@@ -766,48 +787,48 @@ GET /api/sessions/top_anchors/?start=2026-05-01&end=2026-05-31&limit=10
 
 ---
 
-### 直播工具
+### Live Streaming Tools
 
-| 方法 | 路径 | 说明 |
+| Method | Path | Description |
 |------|------|------|
-| GET/POST | `/api/stream-scripts/` | 直播脚本 CRUD |
-| GET/POST | `/api/script-segments/` | 脚本段落 CRUD |
-| GET/POST | `/api/sales-scripts/` | 话术模板 CRUD |
-| GET/POST | `/api/stream-reviews/` | 直播复盘 CRUD |
+| GET/POST | `/api/stream-scripts/` | Live script CRUD |
+| GET/POST | `/api/script-segments/` | Script segment CRUD |
+| GET/POST | `/api/sales-scripts/` | Sales pitch template CRUD |
+| GET/POST | `/api/stream-reviews/` | Live stream review CRUD |
 
-**脚本查询参数:** `store_id`, `status` (draft/active/archived)
+**Script Query Parameters:** `store_id`, `status` (draft/active/archived)
 
-**话术模板查询参数:** `scene`, `kw`
+**Sales Pitch Query Parameters:** `scene`, `kw`
 
-**段落类型:** `warmup` / `product` / `interaction` / `promotion` / `flash_sale` / `closing`
+**Segment Types:** `warmup` / `product` / `interaction` / `promotion` / `flash_sale` / `closing`
 
-**话术场景:** `opening` / `product_intro` / `objection` / `closing` / `follow_up` / `interaction` / `flash_sale`
+**Pitch Scenes:** `opening` / `product_intro` / `objection` / `closing` / `follow_up` / `interaction` / `flash_sale`
 
-**脚本响应示例:**
+**Script Response Example:**
 
 ```json
 {
   "id": 1,
-  "title": "618大促直播脚本",
+  "title": "618 Campaign Live Script",
   "store": 1,
-  "store_name": "旗舰店",
+  "store_name": "Flagship Store",
   "status": "active",
-  "status_display": "使用中",
+  "status_display": "In Use",
   "duration_minutes": 180,
   "creator": 3,
-  "creator_name": "运营小王",
+  "creator_name": "Operator Wang",
   "segment_count": 8,
   "segments": [
     {
       "id": 1,
       "order": 1,
       "segment_type": "warmup",
-      "segment_type_display": "暖场",
-      "title": "开场暖场",
+      "segment_type_display": "Warm-up",
+      "title": "Opening Warm-up",
       "duration_minutes": 10,
       "product": null,
       "product_name": "",
-      "talking_points": "互动拉人气，预热直播间氛围"
+      "talking_points": "Interactive engagement to build atmosphere"
     }
   ]
 }
@@ -815,15 +836,15 @@ GET /api/sessions/top_anchors/?start=2026-05-01&end=2026-05-31&limit=10
 
 ---
 
-### 任务看板
+### Task Board
 
-| 方法 | 路径 | 说明 |
+| Method | Path | Description |
 |------|------|------|
-| GET/POST | `/api/task-boards/` | 看板 CRUD (含嵌套卡片) |
-| GET/POST | `/api/task-cards/` | 任务卡片 CRUD |
-| POST | `/api/task-cards/{id}/move/` | 移动卡片状态 |
+| GET/POST | `/api/task-boards/` | Board CRUD (with nested cards) |
+| GET/POST | `/api/task-cards/` | Task card CRUD |
+| POST | `/api/task-cards/{id}/move/` | Move card status |
 
-**移动卡片:**
+**Move Card:**
 
 ```json
 {
@@ -831,54 +852,54 @@ GET /api/sessions/top_anchors/?start=2026-05-01&end=2026-05-31&limit=10
 }
 ```
 
-卡片状态流转: `todo` --> `doing` --> `done`，或标记为 `blocked`。
+Card status flow: `todo` --> `doing` --> `done`, or mark as `blocked`.
 
-看板响应包含嵌套的 `cards` 数组和 `card_count` 统计字段。
+Board response includes nested `cards` array and `card_count` statistics field.
 
 ---
 
-### 消息中心
+### Notification Center
 
-| 方法 | 路径 | 说明 |
+| Method | Path | Description |
 |------|------|------|
-| GET | `/api/notifications/` | 消息列表 |
-| POST | `/api/notifications/read_all/` | 全部标记已读 |
-| GET | `/api/notifications/unread_count/` | 未读消息数 |
+| GET | `/api/notifications/` | Notification list |
+| POST | `/api/notifications/read_all/` | Mark all as read |
+| GET | `/api/notifications/unread_count/` | Unread notification count |
 
-**查询参数:** `target_id` (接收人), `is_read` (true/false), `type`
+**Query Parameters:** `target_id` (recipient), `is_read` (true/false), `type`
 
-**消息类型:** `system` / `schedule` / `attendance` / `performance` / `leave` / `alert` / `contract` / `task`
+**Notification Types:** `system` / `schedule` / `attendance` / `performance` / `leave` / `alert` / `contract` / `task`
 
-**全部已读:**
+**Mark All Read:**
 
 ```json
 { "target_id": 5 }
 ```
 
-返回: `{"updated": 12}`
+Returns: `{"updated": 12}`
 
-**未读数:**
+**Unread Count:**
 
 ```
 GET /api/notifications/unread_count/?target_id=5
 ```
 
-返回: `{"count": 8}`
+Returns: `{"count": 8}`
 
 ---
 
-### 财务中心
+### Finance Center
 
-| 方法 | 路径 | 说明 |
+| Method | Path | Description |
 |------|------|------|
-| GET/POST | `/api/finance/` | 财务记录 CRUD |
-| GET | `/api/finance/summary/` | 财务汇总 |
+| GET/POST | `/api/finance/` | Finance record CRUD |
+| GET | `/api/finance/summary/` | Finance summary |
 
-**查询参数:** `start`, `end`, `type` (income/expense), `category`, `store_id`
+**Query Parameters:** `start`, `end`, `type` (income/expense), `category`, `store_id`
 
-**财务分类:** `gmv` / `commission` / `salary` / `bonus` / `equipment` / `ads` / `logistics` / `other`
+**Finance Categories:** `gmv` / `commission` / `salary` / `bonus` / `equipment` / `ads` / `logistics` / `other`
 
-**财务汇总:**
+**Finance Summary:**
 
 ```
 GET /api/finance/summary/?start=2026-05-01&end=2026-05-31&store_id=1
@@ -898,79 +919,79 @@ GET /api/finance/summary/?start=2026-05-01&end=2026-05-31&store_id=1
 
 ---
 
-### 佣金管理
+### Commission Management
 
-| 方法 | 路径 | 说明 |
+| Method | Path | Description |
 |------|------|------|
-| GET/POST | `/api/commission-rules/` | 佣金规则 CRUD |
-| GET | `/api/commissions/` | 佣金记录列表 |
-| POST | `/api/commissions/{id}/settle/` | 结算佣金 |
+| GET/POST | `/api/commission-rules/` | Commission rules CRUD |
+| GET | `/api/commissions/` | Commission record list |
+| POST | `/api/commissions/{id}/settle/` | Settle commission |
 
-**查询参数 (佣金记录):** `period`, `status` (pending/settled/cancelled), `employee_id`
+**Query Parameters (commission records):** `period`, `status` (pending/settled/cancelled), `employee_id`
 
-**佣金规则计算方式:** `fixed` (固定金额) / `percent` (比例)
+**Commission Rule Calculation Method:** `fixed` (fixed amount) / `percent` (percentage)
 
-结算后自动记录 `settled_at` 时间。
+After settlement, `settled_at` timestamp is automatically recorded.
 
 ---
 
-### 合同管理
+### Contract Management
 
-| 方法 | 路径 | 说明 |
+| Method | Path | Description |
 |------|------|------|
-| GET/POST | `/api/contracts/` | 合同 CRUD |
-| GET | `/api/contracts/expiring/` | 即将到期合同列表 |
+| GET/POST | `/api/contracts/` | Contract CRUD |
+| GET | `/api/contracts/expiring/` | Soon-to-expire contracts |
 
-**查询参数:** `status`, `employee_id`, `contract_type`
+**Query Parameters:** `status`, `employee_id`, `contract_type`
 
-**合同类型:** `labor` / `service` / `anchor` / `brand`
+**Contract Types:** `labor` / `service` / `anchor` / `brand`
 
-**合同状态:** `active` / `expiring` / `expired` / `terminated`
+**Contract Status:** `active` / `expiring` / `expired` / `terminated`
 
-**即将到期:**
+**Expiring Contracts:**
 
 ```
 GET /api/contracts/expiring/?days=30
 ```
 
-返回指定天数内到期的所有生效中合同。
+Returns all active contracts expiring within the specified number of days.
 
 ---
 
-### 培训管理
+### Training Management
 
-| 方法 | 路径 | 说明 |
+| Method | Path | Description |
 |------|------|------|
-| GET/POST | `/api/training-courses/` | 课程 CRUD |
-| GET/POST | `/api/training-records/` | 培训记录 CRUD |
+| GET/POST | `/api/training-courses/` | Course CRUD |
+| GET/POST | `/api/training-records/` | Training record CRUD |
 
-**查询参数 (课程):** `status` (draft/active/completed), `category`
+**Query Parameters (courses):** `status` (draft/active/completed), `category`
 
-课程响应包含嵌套的 `records` 数组 (学员培训记录)。
+Course response includes nested `records` array (student training records).
 
 ---
 
-### 竞品分析
+### Competitor Analysis
 
-| 方法 | 路径 | 说明 |
+| Method | Path | Description |
 |------|------|------|
-| GET/POST | `/api/competitors/` | 竞品信息 CRUD |
-| GET/POST | `/api/competitor-data/` | 竞品数据追踪 CRUD |
+| GET/POST | `/api/competitors/` | Competitor info CRUD |
+| GET/POST | `/api/competitor-data/` | Competitor data tracking CRUD |
 
-竞品响应包含嵌套的 `data` 数组 (历史追踪数据)。
+Competitor response includes nested `data` array (historical tracking data).
 
 ---
 
-### 粉丝分析
+### Fan Analysis
 
-| 方法 | 路径 | 说明 |
+| Method | Path | Description |
 |------|------|------|
-| GET/POST | `/api/fan-analysis/` | 粉丝数据 CRUD |
-| GET | `/api/fan-analysis/trend/` | 粉丝趋势 |
+| GET/POST | `/api/fan-analysis/` | Fan data CRUD |
+| GET | `/api/fan-analysis/trend/` | Fan trend |
 
-**查询参数:** `store_id`, `start`, `end`
+**Query Parameters:** `store_id`, `start`, `end`
 
-**粉丝趋势:**
+**Fan Trend:**
 
 ```
 GET /api/fan-analysis/trend/?store_id=1&days=30
@@ -990,32 +1011,32 @@ GET /api/fan-analysis/trend/?store_id=1&days=30
 
 ---
 
-### 营销活动
+### Marketing Campaigns
 
-| 方法 | 路径 | 说明 |
+| Method | Path | Description |
 |------|------|------|
-| GET/POST | `/api/campaigns/` | 营销活动 CRUD |
+| GET/POST | `/api/campaigns/` | Campaign CRUD |
 
-**查询参数:** `status` (draft/active/completed/cancelled), `store_id`, `campaign_type`
+**Query Parameters:** `status` (draft/active/completed/cancelled), `store_id`, `campaign_type`
 
-**活动类型:** `flash_sale` / `coupon` / `gift` / `discount` / `live_debut` / `festival`
+**Campaign Types:** `flash_sale` / `coupon` / `gift` / `discount` / `live_debut` / `festival`
 
-响应包含计算字段 `completion_rate` (实际 GMV / 目标 GMV x 100)。
+Response includes computed field `completion_rate` (actual GMV / target GMV x 100).
 
 ---
 
-### 目标管理
+### Goal Management
 
-| 方法 | 路径 | 说明 |
+| Method | Path | Description |
 |------|------|------|
-| GET/POST | `/api/goals/` | 目标 CRUD |
-| GET | `/api/goals/board/` | 目标看板汇总 |
+| GET/POST | `/api/goals/` | Goal CRUD |
+| GET | `/api/goals/board/` | Goal board summary |
 
-**查询参数:** `period`, `employee_id`, `status`, `store_id`
+**Query Parameters:** `period`, `employee_id`, `status`, `store_id`
 
-**目标周期:** `weekly` / `monthly` / `quarterly` / `yearly`
+**Goal Periods:** `weekly` / `monthly` / `quarterly` / `yearly`
 
-**目标看板:**
+**Goal Board:**
 
 ```
 GET /api/goals/board/?period=2026-06
@@ -1035,72 +1056,72 @@ GET /api/goals/board/?period=2026-06
 
 ---
 
-### 操作日志
+### Operation Logs
 
-| 方法 | 路径 | 说明 |
+| Method | Path | Description |
 |------|------|------|
-| GET | `/api/operation-logs/` | 日志列表 (只读) |
+| GET | `/api/operation-logs/` | Log list (read-only) |
 
-**查询参数:** `user`, `action`, `model_name`
+**Query Parameters:** `user`, `action`, `model_name`
 
-系统保留最近 500 条操作日志，单次查询最多返回 200 条。
+The system retains the most recent 500 operation logs, with a maximum of 200 records per query.
 
 ---
 
-### 实时大屏
+### Billboard / Live Screen
 
-| 方法 | 路径 | 说明 |
+| Method | Path | Description |
 |------|------|------|
-| GET/POST | `/api/billboard/` | 大屏配置 CRUD |
-| GET | `/api/billboard/data/` | 大屏实时数据 |
+| GET/POST | `/api/billboard/` | Billboard configuration CRUD |
+| GET | `/api/billboard/data/` | Billboard real-time data |
 
-`data` 接口返回与 Dashboard Overview 相同的数据结构，可配置 `refresh_interval` 用于前端轮询。
+The `data` endpoint returns the same data structure as Dashboard Overview. `refresh_interval` can be configured for frontend polling.
 
 ---
 
-### 权限管理
+### Permission Management
 
-| 方法 | 路径 | 说明 |
+| Method | Path | Description |
 |------|------|------|
-| GET/POST | `/api/roles/` | 角色管理 CRUD |
-| GET/POST | `/api/user-roles/` | 用户角色绑定 CRUD |
+| GET/POST | `/api/roles/` | Role management CRUD |
+| GET/POST | `/api/user-roles/` | User-role binding CRUD |
 
-角色的 `permissions` 字段为 JSON 数组格式，例如:
+The `permissions` field of a role is a JSON array, for example:
 
 ```json
 {
-  "name": "运营经理",
-  "description": "店铺和排班管理权限",
+  "name": "Operations Manager",
+  "description": "Store and schedule management permissions",
   "permissions": ["store:view", "store:edit", "schedule:view", "schedule:edit"]
 }
 ```
 
-角色响应包含 `member_count` 统计字段。
+Role response includes `member_count` statistics field.
 
 ---
 
-### 达人对接
+### KOL / Influencer Management
 
-| 方法 | 路径 | 说明 |
+| Method | Path | Description |
 |------|------|------|
-| GET/POST | `/api/kols/` | KOL 资源管理 CRUD |
+| GET/POST | `/api/kols/` | KOL resource management CRUD |
 
-**查询参数:** `status`, `platform`, `kw` (名称或领域搜索)
+**Query Parameters:** `status`, `platform`, `kw` (name or domain search)
 
-**KOL 状态:** `contacting` / `negotiating` / `cooperating` / `completed`
+**KOL Status:** `contacting` / `negotiating` / `cooperating` / `completed`
 
-**KOL 平台:** `douyin` / `kuaishou` / `xiaohongshu` / `weibo`
+**KOL Platforms:** `douyin` / `kuaishou` / `xiaohongshu` / `weibo`
 
 ---
 
-### 数据导出
+### Data Export
 
-| 方法 | 路径 | 说明 |
+| Method | Path | Description |
 |------|------|------|
-| GET | `/api/exports/` | 导出任务列表 |
-| POST | `/api/exports/create_export/` | 创建并执行导出 |
+| GET | `/api/exports/` | Export task list |
+| POST | `/api/exports/create_export/` | Create and execute export |
 
-**创建导出:**
+**Create Export:**
 
 ```json
 {
@@ -1113,28 +1134,397 @@ GET /api/goals/board/?period=2026-06
 }
 ```
 
-**支持的导出类型:**
+**Supported Export Types:**
 
-| 类型 | 说明 | 导出字段 |
+| Type | Description | Export Fields |
 |------|------|---------|
-| `sessions` | 直播记录 | 日期、主播、店铺、GMV、订单数、时长、峰值观看、转化率 |
-| `attendance` | 考勤记录 | 员工、打卡类型、打卡时间、结果、迟到分钟 |
-| `finance` | 财务记录 | 日期、类型、类目、金额、店铺、备注 |
+| `sessions` | Live session records | Date, anchor, store, GMV, orders, duration, peak viewers, conversion rate |
+| `attendance` | Attendance records | Employee, clock type, clock time, result, late minutes |
+| `finance` | Finance records | Date, type, category, amount, store, remarks |
 
-**响应:**
+**Response:**
 
 ```json
 {
   "id": 1,
-  "name": "sessions导出_20260605120000",
+  "name": "sessions_export_20260605120000",
   "export_type": "sessions",
   "status": "done",
-  "status_display": "已完成",
+  "status_display": "Completed",
   "file_url": "/media/exports/1.csv",
   "file_size": 15234,
   "row_count": 200,
-  "csv_content": "日期,主播,店铺,GMV,订单数,时长(分),峰值观看,转化率\n..."
+  "csv_content": "Date,Anchor,Store,GMV,Orders,Duration(min),Peak Viewers,Conversion Rate\n..."
 }
 ```
 
-单次导出上限 5000 行数据。
+Maximum 5000 rows per export.
+
+---
+
+## 4th Round Extension Modules
+
+The following 20 API endpoint groups were introduced in the 4th development round. Each provides standard CRUD operations plus custom actions as noted.
+
+### Live Interactions `live-interactions`
+
+Manages real-time interaction events during live streams (polls, Q&A, lucky draws, etc.).
+
+| Method | Path | Description |
+|------|------|------|
+| GET | `/api/live-interactions/` | List live interactions |
+| POST | `/api/live-interactions/` | Create interaction |
+| GET | `/api/live-interactions/{id}/` | Interaction detail |
+| PUT | `/api/live-interactions/{id}/` | Full update |
+| DELETE | `/api/live-interactions/{id}/` | Delete interaction |
+| GET | `/api/live-interactions/stats/` | Interaction statistics |
+| POST | `/api/live-interactions/{id}/toggle/` | Enable/disable interaction |
+
+**Data Fields:** `session` (live session ID), `type` (poll / qa / lucky_draw / quiz), `title`, `config` (JSON), `is_active`, `start_time`, `end_time`
+
+---
+
+### Coupons `coupons`
+
+Coupon management for live stream promotions.
+
+| Method | Path | Description |
+|------|------|------|
+| GET | `/api/coupons/` | List coupons |
+| POST | `/api/coupons/` | Create coupon |
+| GET | `/api/coupons/{id}/` | Coupon detail |
+| PUT | `/api/coupons/{id}/` | Full update |
+| DELETE | `/api/coupons/{id}/` | Delete coupon |
+| GET | `/api/coupons/stats/` | Coupon usage statistics |
+| POST | `/api/coupons/{id}/toggle/` | Enable/disable coupon |
+
+**Data Fields:** `code`, `type` (percent / fixed), `value`, `min_purchase`, `max_uses`, `used_count`, `valid_from`, `valid_to`, `store`, `is_active`
+
+---
+
+### Flash Sales `flash-sales`
+
+Time-limited promotional sales events during live streams.
+
+| Method | Path | Description |
+|------|------|------|
+| GET | `/api/flash-sales/` | List flash sales |
+| POST | `/api/flash-sales/` | Create flash sale |
+| GET | `/api/flash-sales/{id}/` | Flash sale detail |
+| PUT | `/api/flash-sales/{id}/` | Full update |
+| DELETE | `/api/flash-sales/{id}/` | Delete flash sale |
+| GET | `/api/flash-sales/stats/` | Flash sale statistics |
+| POST | `/api/flash-sales/{id}/toggle/` | Activate/deactivate flash sale |
+
+**Data Fields:** `product`, `original_price`, `sale_price`, `stock_limit`, `sold_count`, `start_time`, `end_time`, `session`, `is_active`
+
+---
+
+### Room Decorations `room-decorations`
+
+Virtual room decoration and background management for live streams.
+
+| Method | Path | Description |
+|------|------|------|
+| GET | `/api/room-decorations/` | List room decorations |
+| POST | `/api/room-decorations/` | Create decoration |
+| GET | `/api/room-decorations/{id}/` | Decoration detail |
+| PUT | `/api/room-decorations/{id}/` | Full update |
+| DELETE | `/api/room-decorations/{id}/` | Delete decoration |
+| GET | `/api/room-decorations/stats/` | Decoration usage statistics |
+| POST | `/api/room-decorations/{id}/toggle/` | Show/hide decoration |
+
+**Data Fields:** `room`, `type` (background / overlay / badge / banner), `name`, `image_url`, `config` (JSON), `is_active`, `valid_from`, `valid_to`
+
+---
+
+### Script Tags `script-tags`
+
+Tagging and categorization system for live stream scripts.
+
+| Method | Path | Description |
+|------|------|------|
+| GET | `/api/script-tags/` | List script tags |
+| POST | `/api/script-tags/` | Create tag |
+| GET | `/api/script-tags/{id}/` | Tag detail |
+| PUT | `/api/script-tags/{id}/` | Full update |
+| DELETE | `/api/script-tags/{id}/` | Delete tag |
+| GET | `/api/script-tags/stats/` | Tag usage statistics |
+
+**Data Fields:** `name`, `color`, `category` (topic / style / season / campaign), `usage_count`
+
+---
+
+### Sign Contracts `sign-contracts`
+
+Digital contract signing workflow management.
+
+| Method | Path | Description |
+|------|------|------|
+| GET | `/api/sign-contracts/` | List sign contracts |
+| POST | `/api/sign-contracts/` | Create sign contract |
+| GET | `/api/sign-contracts/{id}/` | Sign contract detail |
+| PUT | `/api/sign-contracts/{id}/` | Full update |
+| DELETE | `/api/sign-contracts/{id}/` | Delete sign contract |
+| GET | `/api/sign-contracts/stats/` | Contract statistics |
+| POST | `/api/sign-contracts/{id}/approve/` | Approve contract |
+| POST | `/api/sign-contracts/{id}/reject/` | Reject contract |
+| POST | `/api/sign-contracts/{id}/sign/` | Sign contract |
+
+**Data Fields:** `title`, `party_a`, `party_b`, `contract_type`, `amount`, `status` (draft / pending / approved / rejected / signed / expired), `valid_from`, `valid_to`, `attachment`
+
+---
+
+### Negotiations `negotiations`
+
+KOL/partner negotiation tracking and management.
+
+| Method | Path | Description |
+|------|------|------|
+| GET | `/api/negotiations/` | List negotiations |
+| POST | `/api/negotiations/` | Create negotiation |
+| GET | `/api/negotiations/{id}/` | Negotiation detail |
+| PUT | `/api/negotiations/{id}/` | Full update |
+| DELETE | `/api/negotiations/{id}/` | Delete negotiation |
+| GET | `/api/negotiations/stats/` | Negotiation statistics |
+| POST | `/api/negotiations/{id}/approve/` | Approve negotiation |
+| POST | `/api/negotiations/{id}/reject/` | Reject negotiation |
+
+**Data Fields:** `kol`, `store`, `type` (brand_deal / commission / exclusive), `status` (initiated / in_progress / approved / rejected / completed), `proposed_terms` (JSON), `final_terms` (JSON), `notes`
+
+---
+
+### Investments `investments`
+
+Investment and funding tracking for MCN operations.
+
+| Method | Path | Description |
+|------|------|------|
+| GET | `/api/investments/` | List investments |
+| POST | `/api/investments/` | Create investment |
+| GET | `/api/investments/{id}/` | Investment detail |
+| PUT | `/api/investments/{id}/` | Full update |
+| DELETE | `/api/investments/{id}/` | Delete investment |
+| GET | `/api/investments/stats/` | Investment statistics |
+| POST | `/api/investments/{id}/approve/` | Approve investment |
+| POST | `/api/investments/{id}/reject/` | Reject investment |
+
+**Data Fields:** `title`, `type` (equipment / marketing / talent / r_and_d), `amount`, `status` (proposed / approved / rejected / disbursed / completed), `roi_target`, `actual_roi`, `requestor`, `approver`, `disbursed_at`
+
+---
+
+### Contract Ledger `contract-ledger`
+
+Financial ledger entries associated with contracts.
+
+| Method | Path | Description |
+|------|------|------|
+| GET | `/api/contract-ledger/` | List ledger entries |
+| POST | `/api/contract-ledger/` | Create ledger entry |
+| GET | `/api/contract-ledger/{id}/` | Ledger entry detail |
+| PUT | `/api/contract-ledger/{id}/` | Full update |
+| DELETE | `/api/contract-ledger/{id}/` | Delete ledger entry |
+| GET | `/api/contract-ledger/stats/` | Ledger statistics |
+
+**Data Fields:** `contract`, `type` (receivable / payable / settlement / adjustment), `amount`, `balance`, `due_date`, `settled_date`, `status` (pending / partial / settled), `description`
+
+---
+
+### Authorizations `authorizations`
+
+Authorization and access delegation management for third-party services and platforms.
+
+| Method | Path | Description |
+|------|------|------|
+| GET | `/api/authorizations/` | List authorizations |
+| POST | `/api/authorizations/` | Create authorization |
+| GET | `/api/authorizations/{id}/` | Authorization detail |
+| PUT | `/api/authorizations/{id}/` | Full update |
+| DELETE | `/api/authorizations/{id}/` | Delete authorization |
+| GET | `/api/authorizations/stats/` | Authorization statistics |
+| POST | `/api/authorizations/{id}/approve/` | Approve authorization |
+| POST | `/api/authorizations/{id}/revoke/` | Revoke authorization |
+
+**Data Fields:** `platform`, `account_name`, `auth_type` (oauth / api_key / token), `scope` (JSON), `status` (pending / active / revoked / expired), `granted_at`, `expires_at`, `store`
+
+---
+
+### Competitor Rooms `competitor-rooms`
+
+Monitoring and tracking of competitor live rooms.
+
+| Method | Path | Description |
+|------|------|------|
+| GET | `/api/competitor-rooms/` | List competitor rooms |
+| POST | `/api/competitor-rooms/` | Create competitor room |
+| GET | `/api/competitor-rooms/{id}/` | Competitor room detail |
+| PUT | `/api/competitor-rooms/{id}/` | Full update |
+| DELETE | `/api/competitor-rooms/{id}/` | Delete competitor room |
+| GET | `/api/competitor-rooms/stats/` | Competitor room statistics |
+
+**Data Fields:** `competitor`, `room_id`, `platform`, `room_name`, `avg_viewers`, `peak_viewers`, `avg_gmv`, `live_frequency`, `last_tracked`
+
+---
+
+### Traffic Analysis `traffic-analysis`
+
+Traffic source and funnel analysis for live streams.
+
+| Method | Path | Description |
+|------|------|------|
+| GET | `/api/traffic-analysis/` | List traffic analysis records |
+| POST | `/api/traffic-analysis/` | Create traffic analysis record |
+| GET | `/api/traffic-analysis/{id}/` | Record detail |
+| PUT | `/api/traffic-analysis/{id}/` | Full update |
+| DELETE | `/api/traffic-analysis/{id}/` | Delete record |
+| GET | `/api/traffic-analysis/stats/` | Traffic statistics |
+
+**Data Fields:** `session`, `source` (organic / paid / referral / recommendation / search), `views`, `clicks`, `ctr`, `conversions`, `conversion_rate`, `cost`, `date`
+
+---
+
+### User Personas `user-personas`
+
+Audience/user persona analysis and segmentation.
+
+| Method | Path | Description |
+|------|------|------|
+| GET | `/api/user-personas/` | List user personas |
+| POST | `/api/user-personas/` | Create user persona |
+| GET | `/api/user-personas/{id}/` | Persona detail |
+| PUT | `/api/user-personas/{id}/` | Full update |
+| DELETE | `/api/user-personas/{id}/` | Delete persona |
+| GET | `/api/user-personas/stats/` | Persona statistics |
+
+**Data Fields:** `store`, `segment_name`, `age_range`, `gender_ratio` (JSON), `top_cities` (JSON), `avg_order_value`, `preferences` (JSON), `size`, `engagement_score`
+
+---
+
+### A/B Tests `ab-tests`
+
+A/B testing framework for live stream content and strategies.
+
+| Method | Path | Description |
+|------|------|------|
+| GET | `/api/ab-tests/` | List A/B tests |
+| POST | `/api/ab-tests/` | Create A/B test |
+| GET | `/api/ab-tests/{id}/` | A/B test detail |
+| PUT | `/api/ab-tests/{id}/` | Full update |
+| DELETE | `/api/ab-tests/{id}/` | Delete A/B test |
+| GET | `/api/ab-tests/stats/` | A/B test statistics |
+| POST | `/api/ab-tests/{id}/toggle/` | Start/stop test |
+| POST | `/api/ab-tests/{id}/resolve/` | Resolve and pick winner |
+
+**Data Fields:** `name`, `type` (script / thumbnail / timing / product_layout), `variant_a` (JSON), `variant_b` (JSON), `metric` (gmv / conversion / viewers / engagement), `status` (draft / running / paused / completed), `winner`, `start_date`, `end_date`, `store`
+
+---
+
+### Data Warnings `data-warnings`
+
+Automated data anomaly warning and alerting system.
+
+| Method | Path | Description |
+|------|------|------|
+| GET | `/api/data-warnings/` | List data warnings |
+| POST | `/api/data-warnings/` | Create data warning |
+| GET | `/api/data-warnings/{id}/` | Warning detail |
+| PUT | `/api/data-warnings/{id}/` | Full update |
+| DELETE | `/api/data-warnings/{id}/` | Delete warning |
+| GET | `/api/data-warnings/stats/` | Warning statistics |
+| POST | `/api/data-warnings/{id}/resolve/` | Resolve warning |
+| POST | `/api/data-warnings/{id}/toggle/` | Enable/disable warning rule |
+
+**Data Fields:** `name`, `metric` (gmv / conversion / viewers / orders / attendance), `condition` (below / above / change_rate), `threshold`, `period` (1h / 6h / 24h / 7d), `severity` (info / warning / critical), `status` (active / triggered / resolved / disabled), `store`, `last_triggered`
+
+---
+
+### Settlements `settlements`
+
+Financial settlement and payout management.
+
+| Method | Path | Description |
+|------|------|------|
+| GET | `/api/settlements/` | List settlements |
+| POST | `/api/settlements/` | Create settlement |
+| GET | `/api/settlements/{id}/` | Settlement detail |
+| PUT | `/api/settlements/{id}/` | Full update |
+| DELETE | `/api/settlements/{id}/` | Delete settlement |
+| GET | `/api/settlements/stats/` | Settlement statistics |
+| POST | `/api/settlements/{id}/approve/` | Approve settlement |
+| POST | `/api/settlements/{id}/pay/` | Execute payment |
+
+**Data Fields:** `contract`, `employee`, `type` (salary / commission / bonus / reimbursement), `amount`, `period`, `status` (pending / approved / paid / cancelled), `approved_by`, `paid_at`, `payment_method`, `reference_number`
+
+---
+
+### Logistics `logistics`
+
+Shipping and delivery tracking for orders placed during live streams.
+
+| Method | Path | Description |
+|------|------|------|
+| GET | `/api/logistics/` | List logistics records |
+| POST | `/api/logistics/` | Create logistics record |
+| GET | `/api/logistics/{id}/` | Logistics detail |
+| PUT | `/api/logistics/{id}/` | Full update |
+| DELETE | `/api/logistics/{id}/` | Delete logistics record |
+| GET | `/api/logistics/stats/` | Logistics statistics |
+| POST | `/api/logistics/{id}/ship/` | Mark as shipped |
+| POST | `/api/logistics/{id}/deliver/` | Mark as delivered |
+
+**Data Fields:** `order_id`, `carrier`, `tracking_number`, `status` (pending / shipped / in_transit / delivered / failed), `shipped_at`, `delivered_at`, `origin`, `destination`, `estimated_delivery`, `store`
+
+---
+
+### Inventories `inventories`
+
+Warehouse and multi-location inventory management.
+
+| Method | Path | Description |
+|------|------|------|
+| GET | `/api/inventories/` | List inventory records |
+| POST | `/api/inventories/` | Create inventory record |
+| GET | `/api/inventories/{id}/` | Inventory detail |
+| PUT | `/api/inventories/{id}/` | Full update |
+| DELETE | `/api/inventories/{id}/` | Delete inventory record |
+| GET | `/api/inventories/stats/` | Inventory statistics |
+
+**Data Fields:** `product`, `warehouse`, `quantity`, `reserved`, `available`, `cost_price`, `last_restocked`, `min_stock`, `max_stock`
+
+---
+
+### Return Analysis `return-analysis`
+
+Product return tracking, analysis, and management.
+
+| Method | Path | Description |
+|------|------|------|
+| GET | `/api/return-analysis/` | List return records |
+| POST | `/api/return-analysis/` | Create return record |
+| GET | `/api/return-analysis/{id}/` | Return detail |
+| PUT | `/api/return-analysis/{id}/` | Full update |
+| DELETE | `/api/return-analysis/{id}/` | Delete return record |
+| GET | `/api/return-analysis/stats/` | Return statistics |
+| POST | `/api/return-analysis/{id}/resolve/` | Resolve return |
+| POST | `/api/return-analysis/{id}/approve/` | Approve return |
+
+**Data Fields:** `order_id`, `product`, `quantity`, `reason` (defective / wrong_item / not_as_described / changed_mind / other), `status` (requested / approved / rejected / processing / refunded / resolved), `refund_amount`, `store`, `session`, `resolution_notes`, `resolved_at`
+
+---
+
+### Tax Records `tax-records`
+
+Tax filing and record management for financial compliance.
+
+| Method | Path | Description |
+|------|------|------|
+| GET | `/api/tax-records/` | List tax records |
+| POST | `/api/tax-records/` | Create tax record |
+| GET | `/api/tax-records/{id}/` | Tax record detail |
+| PUT | `/api/tax-records/{id}/` | Full update |
+| DELETE | `/api/tax-records/{id}/` | Delete tax record |
+| GET | `/api/tax-records/stats/` | Tax statistics |
+| POST | `/api/tax-records/{id}/approve/` | Approve tax record |
+| POST | `/api/tax-records/{id}/pay/` | Mark tax as paid |
+
+**Data Fields:** `type` (vat / income / withholding / stamp / other), `period`, `amount`, `tax_base`, `rate`, `status` (pending / approved / paid / filed), `due_date`, `paid_date`, `store`, `filing_number`, `notes`

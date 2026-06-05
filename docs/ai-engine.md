@@ -1,30 +1,30 @@
-# MCN AI Engine 技术文档
+# MCN AI Engine Technical Document
 
-> 版本: 1.0 | 纯算法引擎，无需外部 AI API 依赖 | 基于 Django ORM + 统计分析
-
----
-
-## 目录
-
-- [架构概览](#架构概览)
-- [GMVPredictor -- GMV 预测引擎](#1-gmvpredictor----gmv-预测引擎)
-- [SmartScheduler -- 智能排班推荐](#2-smartscheduler----智能排班推荐)
-- [AnchorProfiler -- 主播画像分析](#3-anchorprofiler----主播画像分析)
-- [AnomalyDetector -- 异常数据检测](#4-anomalydetector----异常数据检测)
-- [InsightEngine -- 运营建议引擎](#5-insightengine----运营建议引擎)
-- [AnchorMatcher -- 主播店铺匹配](#6-anchormatcher----主播店铺匹配)
-- [缓存策略](#缓存策略)
+> Version: 1.0 | Pure algorithm engine, no external AI API dependencies | Based on Django ORM + Statistical Analysis
 
 ---
 
-## 架构概览
+## Table of Contents
 
-MCN AI Engine 包含 6 个独立的智能引擎，全部基于历史数据的统计分析和规则引擎实现，不依赖任何外部 AI 服务。
+- [Architecture Overview](#architecture-overview)
+- [GMVPredictor -- GMV Prediction Engine](#1-gmvpredictor----gmv-prediction-engine)
+- [SmartScheduler -- Smart Scheduling Recommendation](#2-smartscheduler----smart-scheduling-recommendation)
+- [AnchorProfiler -- Anchor Profile Analysis](#3-anchorprofiler----anchor-profile-analysis)
+- [AnomalyDetector -- Anomaly Data Detection](#4-anomalydetector----anomaly-data-detection)
+- [InsightEngine -- Operations Insight Engine](#5-insightengine----operations-insight-engine)
+- [AnchorMatcher -- Anchor-Store Matching](#6-anchormatcher----anchor-store-matching)
+- [Caching Strategy](#caching-strategy)
+
+---
+
+## Architecture Overview
+
+The MCN AI Engine contains 6 independent intelligent engines, all implemented based on historical data statistical analysis and rule engines, with no dependency on any external AI services.
 
 ```
                     +-------------------+
                     |   AIViewSet       |
-                    |   (API 入口)      |
+                    |   (API Entry)     |
                     +--------+----------+
                              |
               +--------------+--------------+
@@ -48,46 +48,46 @@ MCN AI Engine 包含 6 个独立的智能引擎，全部基于历史数据的统
                     +-------------------+
 ```
 
-### 公共工具函数
+### Common Utility Functions
 
-| 函数 | 用途 |
+| Function | Purpose |
 |------|------|
-| `_linear_regression(xs, ys)` | 最小二乘法线性回归，返回 slope, intercept, R-squared |
-| `_moving_average(data, window)` | 滑动窗口移动平均 |
-| `_z_score(value, mean, std)` | 标准 Z-Score 计算公式 |
-| `_confidence_level(r2, n)` | 基于 R-squared 和样本量的置信度评估 |
-| `_risk_label(r2, n, slope_pct)` | 风险标签生成 |
+| `_linear_regression(xs, ys)` | Least-squares linear regression, returns slope, intercept, R-squared |
+| `_moving_average(data, window)` | Sliding window moving average |
+| `_z_score(value, mean, std)` | Standard Z-Score calculation |
+| `_confidence_level(r2, n)` | Confidence level assessment based on R-squared and sample size |
+| `_risk_label(r2, n, slope_pct)` | Risk label generation |
 
 ---
 
-## 1. GMVPredictor -- GMV 预测引擎
+## 1. GMVPredictor -- GMV Prediction Engine
 
-### 接口
+### Endpoint
 
 ```
 GET /api/ai/predict/?days=7&store_id=1&employee_id=5
 ```
 
-| 参数 | 类型 | 范围 | 说明 |
+| Parameter | Type | Range | Description |
 |------|------|------|------|
-| days | int | 1 - 30 | 预测天数 (默认 7) |
-| store_id | int | 可选 | 按店铺筛选 |
-| employee_id | int | 可选 | 按主播筛选 |
+| days | int | 1 - 30 | Number of days to predict (default 7) |
+| store_id | int | Optional | Filter by store |
+| employee_id | int | Optional | Filter by anchor |
 
-### 算法原理
+### Algorithm
 
-采用 **线性回归 + 移动平均 + 季节性调整** 三层融合模型:
+Uses a **Linear Regression + Moving Average + Seasonality Adjustment** three-layer fusion model:
 
-#### 步骤一: 线性回归拟合
+#### Step 1: Linear Regression Fitting
 
-对历史 N 天的日 GMV 数据，使用最小二乘法拟合线性回归模型:
+For daily GMV data over the past N days, fit a linear regression model using least squares:
 
 ```
 slope     = (n * Sum(xi*yi) - Sum(xi)*Sum(yi)) / (n * Sum(xi^2) - Sum(xi)^2)
 intercept = (Sum(yi) - slope * Sum(xi)) / n
 ```
 
-拟合度 (R-squared):
+Goodness of fit (R-squared):
 
 ```
 R^2 = 1 - SS_res / SS_tot
@@ -95,41 +95,41 @@ R^2 = 1 - SS_res / SS_tot
   SS_tot = Sum((yi - y_mean)^2)
 ```
 
-#### 步骤二: 季节性系数
+#### Step 2: Seasonality Factor
 
-按星期几计算调整系数:
-
-```
-weekday_factor(w) = 该星期几的平均GMV / 全局平均GMV
-```
-
-#### 步骤三: 三层融合
+Calculate adjustment factor by day of week:
 
 ```
-base    = slope * (N + i - 1) + intercept          # 线性回归基线
-blended = base * 0.40 + MA7 * 0.35 + MA14 * 0.25   # 融合移动平均
-predicted = max(0, blended * weekday_factor(w))     # 季节性调整
+weekday_factor(w) = average_gmv_for_weekday_w / global_average_gmv
 ```
 
-### 置信度评估
+#### Step 3: Three-Layer Fusion
 
-| 级别 | 条件 |
+```
+base    = slope * (N + i - 1) + intercept          # Linear regression baseline
+blended = base * 0.40 + MA7 * 0.35 + MA14 * 0.25   # Fuse with moving averages
+predicted = max(0, blended * weekday_factor(w))     # Seasonality adjustment
+```
+
+### Confidence Assessment
+
+| Level | Condition |
 |------|------|
-| `high` | R^2 > 0.7 且数据点 >= 7 |
+| `high` | R^2 > 0.7 and data points >= 7 |
 | `medium` | R^2 > 0.4 |
-| `low` | 其他情况 |
+| `low` | All other cases |
 
-### 风险标签
+### Risk Labels
 
-| 标签 | 条件 | 级别 |
+| Label | Condition | Level |
 |------|------|------|
-| 数据不足 | 样本 < 5 天 | warning |
-| 下降趋势 | 周期斜率 < -15% | danger |
-| 轻微下降 | 周期斜率 < -5% | warning |
-| 波动较大 | R^2 < 0.3 | warning |
-| 趋势良好 | 其他 | success |
+| Insufficient data | Samples < 5 days | warning |
+| Downward trend | Period slope < -15% | danger |
+| Slight decline | Period slope < -5% | warning |
+| High volatility | R^2 < 0.3 | warning |
+| Good trend | All other cases | success |
 
-### 响应示例
+### Response Example
 
 ```json
 {
@@ -137,13 +137,13 @@ predicted = max(0, blended * weekday_factor(w))     # 季节性调整
   "predictions": [
     {
       "date": "2026-06-06",
-      "weekday": "六",
+      "weekday": "Sat",
       "predicted_gmv": 62850.75,
       "confidence": 72.3
     },
     {
       "date": "2026-06-07",
-      "weekday": "日",
+      "weekday": "Sun",
       "predicted_gmv": 71200.40,
       "confidence": 72.3
     }
@@ -156,7 +156,7 @@ predicted = max(0, blended * weekday_factor(w))     # 季节性调整
     "wow_change": 3.15,
     "r2": 0.7230,
     "confidence": "high",
-    "risk": "趋势良好",
+    "risk": "Good trend",
     "risk_type": "success",
     "data_points": 30,
     "ma7": 62100.50,
@@ -178,14 +178,14 @@ predicted = max(0, blended * weekday_factor(w))     # 季节性调整
 }
 ```
 
-### 最小数据要求
+### Minimum Data Requirement
 
-至少 3 天历史数据。不足时返回:
+At least 3 days of historical data. When insufficient, returns:
 
 ```json
 {
   "status": "insufficient_data",
-  "message": "历史数据不足（仅2天），需要至少3天数据",
+  "message": "Insufficient historical data (only 2 days), at least 3 days required",
   "predictions": [],
   "confidence": "low"
 }
@@ -193,72 +193,72 @@ predicted = max(0, blended * weekday_factor(w))     # 季节性调整
 
 ---
 
-## 2. SmartScheduler -- 智能排班推荐
+## 2. SmartScheduler -- Smart Scheduling Recommendation
 
-### 接口
+### Endpoint
 
 ```
 GET /api/ai/schedule/?date=2026-06-06&store_id=1
 ```
 
-| 参数 | 类型 | 说明 |
+| Parameter | Type | Description |
 |------|------|------|
-| date | date | 目标日期 (默认明天) |
-| store_id | int | 按店铺筛选 (可选) |
+| date | date | Target date (default: tomorrow) |
+| store_id | int | Filter by store (optional) |
 
-### 算法原理
+### Algorithm
 
-采用 **贪心匹配 + 多因子评分** 策略: 对每个班次，按综合评分从高到低排列候选人，取最优分配。
+Uses a **Greedy Matching + Multi-Factor Scoring** strategy: for each shift, rank candidates by composite score in descending order and assign the best match.
 
-#### 评分公式
+#### Scoring Formula
 
 ```
 final_score = base_score * fatigue_penalty * late_penalty
 ```
 
-#### base_score 计算 (0-100)
+#### base_score Calculation (0-100)
 
 ```
-base_score = min(avg_gmv / 50000, 1) * 40      # GMV 贡献 (权重 40)
-           + min(avg_viewers / 5000, 1) * 30    # 流量贡献 (权重 30)
-           + 30                                   # 基础分
-           + time_bonus                           # 时段匹配奖励 (最高 20)
+base_score = min(avg_gmv / 50000, 1) * 40      # GMV contribution (weight 40)
+           + min(avg_viewers / 5000, 1) * 30    # Traffic contribution (weight 30)
+           + 30                                   # Base score
+           + time_bonus                           # Time slot match bonus (up to 20)
 ```
 
-**时段匹配奖励:**
+**Time Slot Match Bonus:**
 
 ```
-time_bonus = (主播在该班次时段附近开播次数 / 总开播次数) * 20
+time_bonus = (anchor's go-live count near the shift time / total go-live count) * 20
 ```
 
-判定条件: 主播历史开播时间与班次开始时间差 <= 2 小时。
+Matching condition: the difference between the anchor's historical go-live time and shift start time is <= 2 hours.
 
-#### 疲劳惩罚
+#### Fatigue Penalty
 
-| 连续工作天数 | 惩罚系数 |
+| Consecutive Work Days | Penalty Factor |
 |------------|---------|
-| >= 5 天 | x 0.3 (强烈建议休息) |
-| >= 3 天 | x 0.7 |
-| < 3 天 | x 1.0 |
+| >= 5 days | x 0.3 (strongly recommend rest) |
+| >= 3 days | x 0.7 |
+| < 3 days | x 1.0 |
 
-#### 迟到惩罚
+#### Late Penalty
 
 ```
 late_penalty = 1 - late_rate * 0.5
 ```
 
-近 14 天迟到率越高，惩罚越大。
+Higher late rate in the past 14 days results in greater penalty.
 
-### 匹配流程
+### Matching Process
 
-1. 获取所有在职主播和班次模板
-2. 计算每个主播在每个班次的表现分
-3. 获取已有排班 (排除已排班主播)
-4. 获取近 14 天迟到率
-5. 获取连续工作天数
-6. 贪心分配: 按班次遍历，每班分配评分最高的未分配主播
+1. Retrieve all active anchors and shift templates
+2. Calculate performance score for each anchor on each shift
+3. Retrieve existing schedules (exclude already-scheduled anchors)
+4. Retrieve late rate for the past 14 days
+5. Retrieve consecutive work days
+6. Greedy assignment: iterate through shifts, assign the highest-scoring unassigned anchor to each
 
-### 响应示例
+### Response Example
 
 ```json
 {
@@ -267,39 +267,39 @@ late_penalty = 1 - late_rate * 0.5
   "recommendations": [
     {
       "shift_id": 1,
-      "shift_name": "早班",
+      "shift_name": "Morning Shift",
       "shift_time": "08:00-14:00",
       "candidates": [
         {
           "anchor_id": 5,
-          "anchor_name": "李佳琦",
+          "anchor_name": "Li Jiaqi",
           "score": 85.2,
           "consecutive_days": 0,
           "late_rate": 5.0,
-          "reason": "历史表现优异，精力充沛"
+          "reason": "Excellent historical performance, well-rested"
         },
         {
           "anchor_id": 8,
-          "anchor_name": "薇娅",
+          "anchor_name": "Viya",
           "score": 72.1,
           "consecutive_days": 2,
           "late_rate": 0.0,
-          "reason": "表现稳定"
+          "reason": "Stable performance"
         }
       ]
     },
     {
       "shift_id": 2,
-      "shift_name": "晚班",
+      "shift_name": "Evening Shift",
       "shift_time": "18:00-24:00",
       "candidates": [
         {
           "anchor_id": 12,
-          "anchor_name": "张三",
+          "anchor_name": "Zhang San",
           "score": 25.5,
           "consecutive_days": 5,
           "late_rate": 15.0,
-          "reason": "历史表现优异，连续工作过多建议休息，迟到率偏高"
+          "reason": "Excellent historical performance, overworked consecutive days recommend rest, high late rate"
         }
       ]
     }
@@ -313,123 +313,123 @@ late_penalty = 1 - late_rate * 0.5
 }
 ```
 
-### 推荐理由生成规则
+### Recommendation Reason Generation Rules
 
-| 条件 | 生成文本 |
+| Condition | Generated Text |
 |------|---------|
-| score >= 80 | "历史表现优异" |
-| score >= 60 | "表现稳定" |
-| consecutive >= 5 | "连续工作过多建议休息" |
-| consecutive == 0 | "精力充沛" |
-| late_rate > 20% | "迟到率偏高" |
-| 默认 | "可安排" |
+| score >= 80 | "Excellent historical performance" |
+| score >= 60 | "Stable performance" |
+| consecutive >= 5 | "Overworked consecutive days recommend rest" |
+| consecutive == 0 | "Well-rested" |
+| late_rate > 20% | "High late rate" |
+| Default | "Available for scheduling" |
 
 ---
 
-## 3. AnchorProfiler -- 主播画像分析
+## 3. AnchorProfiler -- Anchor Profile Analysis
 
-### 接口
+### Endpoint
 
 ```
 GET /api/ai/anchor/?employee_id=5
 ```
 
-| 参数 | 类型 | 必填 | 说明 |
+| Parameter | Type | Required | Description |
 |------|------|------|------|
-| employee_id | int | 是 | 主播员工 ID |
+| employee_id | int | Yes | Anchor employee ID |
 
-### 五维能力模型
+### Five-Dimensional Competency Model
 
-基于最近 30 天的直播数据，从 5 个维度量化主播能力:
+Based on the last 30 days of live streaming data, quantifies anchor capability across 5 dimensions:
 
-#### 销售力 (sales)
+#### Sales Power (sales)
 
 ```
-sales = clamp(50 + Z-Score(gmv_30d, 全局gmv均值, 全局gmv标准差) * 15, 20, 100)
+sales = clamp(50 + Z-Score(gmv_30d, global_gmv_mean, global_gmv_std) * 15, 20, 100)
 ```
 
-将主播 30 天 GMV 与全平台所有主播的均值和标准差进行 Z-Score 标准化后映射到 20-100 区间。
+Maps the anchor's 30-day GMV to the 20-100 range using Z-Score standardization against the mean and standard deviation of all anchors across the platform.
 
-#### 流量力 (traffic)
+#### Traffic Power (traffic)
 
 ```
 traffic = clamp(min(avg_viewers / 100, 1) * 80 + 20, 20, 100)
 ```
 
-基于场均观看人数，每 100 人对应 80 分的线性映射。
+Linear mapping based on average viewers per session; every 100 viewers corresponds to 80 points.
 
-#### 转化力 (conversion)
+#### Conversion Power (conversion)
 
 ```
 conversion = clamp(min(avg_conversion / 5, 1) * 80 + 20, 20, 100)
 ```
 
-基于平均转化率，5% 对应满分 100 的线性映射。
+Linear mapping based on average conversion rate; 5% maps to a full score of 100.
 
-#### 稳定性 (stability)
+#### Stability (stability)
 
 ```
 stability = clamp(attendance_rate * 0.5 + min(sessions / 20, 1) * 50, 20, 100)
 ```
 
-综合出勤率和开播频率的稳定性评估。
+Composite assessment of attendance rate and streaming frequency stability.
 
-#### 成长性 (growth)
+#### Growth (growth)
 
 ```
 growth = clamp(50 + gmv_trend_15d * 0.5, 20, 100)
 ```
 
-基于近半月与上半月的 GMV 环比增长率。
+Based on the month-over-month GMV growth rate comparing the recent half-month to the prior half-month.
 
-#### 综合评分
+#### Overall Score
 
 ```
 overall = (sales + traffic + conversion + stability + growth) / 5
 ```
 
-### 趋势对比逻辑
+### Trend Comparison Logic
 
-将最近 30 天分为两个 15 天区间:
+The last 30 days are split into two 15-day periods:
 
 ```
 gmv_trend = (recent_15d_gmv - earlier_15d_gmv) / earlier_15d_gmv * 100
 ```
 
-| 趋势 | 方向判定 |
+| Trend | Direction |
 |------|---------|
 | > +5% | `up` |
 | -5% ~ +5% | `stable` |
 | < -5% | `down` |
 
-### AI 洞察规则
+### AI Insight Rules
 
-系统根据主播各项指标自动生成洞察建议:
+The system automatically generates actionable insight suggestions based on the anchor's metrics:
 
-| 条件 | 类型 | 洞察文本 |
+| Condition | Type | Insight Text |
 |------|------|---------|
-| GMV 增长 > 20% | success | "近半月GMV增长{trend}%，正处于上升期" |
-| GMV 下降 > 20% | danger | "近半月GMV下降{trend}%，建议排查原因" |
-| 转化率 > 3% | success | "转化率{conv}%高于平均水平，带货能力强" |
-| 转化率 < 1% | warning | "转化率仅{conv}%，建议优化话术和选品" |
-| 出勤率 < 80% | danger | "出勤率{rate}%偏低，影响排班稳定性" |
-| 30天直播 >= 25场 | warning | "30天内直播{sessions}场，注意劳逸结合" |
-| 场均观看 > 5000 | success | "场均观看{viewers}，流量获取能力突出" |
-| 场均GMV较高 | success | "场均GMV {avg}元，销售效率高" |
-| 默认 | info | "数据表现稳定，继续保持" |
+| GMV growth > 20% | success | "GMV grew {trend}% in the last half-month, currently on an upward trend" |
+| GMV decline > 20% | danger | "GMV declined {trend}% in the last half-month, recommend investigating the cause" |
+| Conversion rate > 3% | success | "Conversion rate {conv}% is above average, strong sales capability" |
+| Conversion rate < 1% | warning | "Conversion rate is only {conv}%, recommend optimizing sales pitch and product selection" |
+| Attendance rate < 80% | danger | "Attendance rate {rate}% is below normal, affects scheduling stability" |
+| 30-day sessions >= 25 | warning | "30-day live sessions: {sessions}, ensure adequate rest" |
+| Avg viewers > 5000 | success | "Average viewers: {viewers}, outstanding traffic acquisition ability" |
+| High avg GMV per session | success | "Average GMV per session: {avg}, high sales efficiency" |
+| Default | info | "Data performance is stable, keep it up" |
 
-### 响应示例
+### Response Example
 
 ```json
 {
   "status": "ok",
   "anchor": {
     "id": 5,
-    "name": "李佳琦",
-    "nickname": "佳琦LJQ",
-    "level": "金牌",
+    "name": "Li Jiaqi",
+    "nickname": "JiaqiLJQ",
+    "level": "Gold",
     "fans": 3500000,
-    "stores": ["旗舰店", "美妆专营店"]
+    "stores": ["Flagship Store", "Beauty Specialty Store"]
   },
   "metrics_30d": {
     "gmv": 1280000.00,
@@ -459,67 +459,67 @@ gmv_trend = (recent_15d_gmv - earlier_15d_gmv) / earlier_15d_gmv * 100
     {"hour": 21, "avg_gmv": 52000.00, "sessions": 5}
   ],
   "best_stores": [
-    {"name": "旗舰店", "platform": "douyin", "gmv": 850000.00},
-    {"name": "美妆专营店", "platform": "taobao", "gmv": 430000.00}
+    {"name": "Flagship Store", "platform": "douyin", "gmv": 850000.00},
+    {"name": "Beauty Specialty Store", "platform": "taobao", "gmv": 430000.00}
   ],
   "insights": [
-    {"type": "success", "icon": "📈", "text": "近半月GMV增长13%，正处于上升期"},
-    {"type": "success", "icon": "🎯", "text": "转化率3.8%高于平均水平，带货能力强"},
-    {"type": "success", "icon": "👀", "text": "场均观看8500，流量获取能力突出"}
+    {"type": "success", "icon": "📈", "text": "GMV grew 13% in the last half-month, currently on an upward trend"},
+    {"type": "success", "icon": "🎯", "text": "Conversion rate 3.8% is above average, strong sales capability"},
+    {"type": "success", "icon": "👀", "text": "Average viewers 8500, outstanding traffic acquisition ability"}
   ]
 }
 ```
 
 ---
 
-## 4. AnomalyDetector -- 异常数据检测
+## 4. AnomalyDetector -- Anomaly Data Detection
 
-### 接口
+### Endpoint
 
 ```
 GET /api/ai/anomaly/?days=7
 ```
 
-| 参数 | 类型 | 范围 | 说明 |
+| Parameter | Type | Range | Description |
 |------|------|------|------|
-| days | int | 1 - 30 | 检测天数 (默认 7) |
+| days | int | 1 - 30 | Detection period in days (default 7) |
 
-### 算法原理
+### Algorithm
 
-采用 **Z-Score 统计检测 + 业务规则引擎** 双重检测机制。
+Uses a dual detection mechanism: **Z-Score Statistical Detection + Business Rule Engine**.
 
-#### Z-Score 统计检测
+#### Z-Score Statistical Detection
 
-对指定时间范围内的所有直播场次，计算 GMV、平均观看、转化率三个维度的全局均值和标准差:
+For all live sessions within the specified time range, calculate global mean and standard deviation across three dimensions: GMV, average viewers, and conversion rate:
 
 ```
 z = (value - mean) / std
 ```
 
-| 检测维度 | 阈值 | 异常判定 |
+| Detection Dimension | Threshold | Anomaly Determination |
 |---------|------|---------|
-| GMV | z < -2 | "GMV异常偏低(偏离{z}个标准差)" |
-| GMV | z > 2 | "GMV异常偏高(高出{z}个标准差)" |
-| 平均观看 | z < -2 | "流量骤降(偏离{z}σ)" |
-| 转化率 | z < -1.5 | "转化率异常低({value}%)" |
+| GMV | z < -2 | "GMV abnormally low (deviates {z} standard deviations)" |
+| GMV | z > 2 | "GMV abnormally high (exceeds {z} standard deviations)" |
+| Avg viewers | z < -2 | "Traffic drop (deviates {z} sigma)" |
+| Conversion rate | z < -1.5 | "Conversion rate abnormally low ({value}%)" |
 
-#### 业务规则引擎
+#### Business Rule Engine
 
-| 规则 | 触发条件 | 说明 |
+| Rule | Trigger Condition | Description |
 |------|---------|------|
-| 直播过短 | duration < 30 min | 可能是异常开播 |
-| 数据矛盾 | GMV > 0 且 orders == 0 | 数据录入可能出错 |
-| 转化率超高 | conversion > 15% | 需人工核实 |
-| 超长直播 | duration > 480 min | 疲劳风险预警 |
+| Too short | duration < 30 min | Possibly an abnormal stream start |
+| Data contradiction | GMV > 0 and orders == 0 | Data entry may be incorrect |
+| Extremely high conversion | conversion > 15% | Requires manual verification |
+| Overly long stream | duration > 480 min | Fatigue risk warning |
 
-#### 严重级别
+#### Severity Levels
 
-| 级别 | 判定条件 |
+| Level | Determination Condition |
 |------|---------|
-| `critical` | 包含"偏低"或"骤降"关键词的异常 |
-| `warning` | 其他所有异常 |
+| `critical` | Anomalies containing "abnormally low" or "drop" keywords |
+| `warning` | All other anomalies |
 
-### 响应示例
+### Response Example
 
 ```json
 {
@@ -528,30 +528,30 @@ z = (value - mean) / std
     {
       "session_id": 245,
       "date": "2026-06-03",
-      "anchor": "张三",
-      "store": "旗舰店",
+      "anchor": "Zhang San",
+      "store": "Flagship Store",
       "gmv": 5200.00,
       "viewers": 320,
       "conversion": 0.3,
       "duration": 22,
       "flags": [
-        "GMV异常偏低(偏离2.5个标准差)",
-        "流量骤降(偏离2.1σ)",
-        "直播时长过短(<30分钟)"
+        "GMV abnormally low (deviates 2.5 standard deviations)",
+        "Traffic drop (deviates 2.1 sigma)",
+        "Stream duration too short (< 30 minutes)"
       ],
       "severity": "critical"
     },
     {
       "session_id": 251,
       "date": "2026-06-04",
-      "anchor": "李四",
-      "store": "专营店",
+      "anchor": "Li Si",
+      "store": "Specialty Store",
       "gmv": 58000.00,
       "viewers": 2800,
       "conversion": 18.5,
       "duration": 240,
       "flags": [
-        "转化率超高(18.5%)，请核实"
+        "Extremely high conversion rate (18.5%), please verify"
       ],
       "severity": "warning"
     }
@@ -562,16 +562,16 @@ z = (value - mean) / std
     "critical_count": 2,
     "anomaly_rate": 11.9,
     "top_flagged": [
-      {"name": "张三", "count": 3},
-      {"name": "王五", "count": 1}
+      {"name": "Zhang San", "count": 3},
+      {"name": "Wang Wu", "count": 1}
     ]
   }
 }
 ```
 
-### 最小数据要求
+### Minimum Data Requirement
 
-至少 5 场直播数据。不足时返回:
+At least 5 live session records. When insufficient, returns:
 
 ```json
 {
@@ -583,77 +583,77 @@ z = (value - mean) / std
 
 ---
 
-## 5. InsightEngine -- 运营建议引擎
+## 5. InsightEngine -- Operations Insight Engine
 
-### 接口
+### Endpoint
 
 ```
 GET /api/ai/insights/
 ```
 
-无参数，自动扫描全盘数据生成建议。
+No parameters. Automatically scans all data to generate recommendations.
 
-### 检测维度
+### Detection Dimensions
 
-引擎自动检测以下 7 个维度，生成可执行的运营建议:
+The engine automatically detects the following 7 dimensions and generates actionable operational recommendations:
 
-#### 1. 店铺目标达成 (store)
+#### 1. Store Target Achievement (store)
 
-| 条件 | 优先级 |
+| Condition | Priority |
 |------|--------|
-| 30天GMV完成率 < 50% | high |
+| 30-day GMV completion rate < 50% | high |
 
-建议内容: 增加直播场次或调整主播配置。
+Recommendation: Increase live session count or adjust anchor allocation.
 
-#### 2. 店铺转化率 (conversion)
+#### 2. Store Conversion Rate (conversion)
 
-| 条件 | 优先级 |
+| Condition | Priority |
 |------|--------|
-| 30天平均转化率 < 1% 且场次 >= 5 | medium |
+| 30-day avg conversion rate < 1% and sessions >= 5 | medium |
 
-建议内容: 优化选品策略和主播话术。
+Recommendation: Optimize product selection strategy and anchor sales pitch.
 
-#### 3. 主播疲劳 (fatigue)
+#### 3. Anchor Fatigue (fatigue)
 
-| 条件 | 优先级 |
+| Condition | Priority |
 |------|--------|
-| 连续工作天数 >= 6 | high |
+| Consecutive work days >= 6 | high |
 
-建议内容: 安排调休，防止质量下降和流失。
+Recommendation: Schedule rest days to prevent quality decline and attrition.
 
-#### 4. 合同到期 (contract)
+#### 4. Contract Expiration (contract)
 
-| 条件 | 优先级 |
+| Condition | Priority |
 |------|--------|
-| 合同 30 天内到期 | high |
+| Contract expires within 30 days | high |
 
-建议内容: 尽快启动续约沟通。
+Recommendation: Initiate renewal discussions as soon as possible.
 
-#### 5. 考勤异常 (attendance)
+#### 5. Attendance Anomalies (attendance)
 
-| 条件 | 优先级 |
+| Condition | Priority |
 |------|--------|
-| 近 7 天迟到 >= 2 次 | medium |
+| Late arrivals >= 2 times in the past 7 days | medium |
 
-建议内容: 进行沟通，避免影响团队纪律。
+Recommendation: Have a discussion to prevent impact on team discipline.
 
-#### 6. 待审批请假 (leave)
+#### 6. Pending Leave Approvals (leave)
 
-| 条件 | 优先级 |
+| Condition | Priority |
 |------|--------|
-| 有 pending 状态的请假申请 | medium |
+| Leave requests in pending status exist | medium |
 
-建议内容: 及时审批以避免排班冲突。
+Recommendation: Approve promptly to avoid scheduling conflicts.
 
-#### 7. GMV 趋势预警 (revenue)
+#### 7. GMV Trend Warning (revenue)
 
-| 条件 | 优先级 |
+| Condition | Priority |
 |------|--------|
-| 近 7 天日均 GMV 较之前下降 > 20% | high |
+| Daily avg GMV over the past 7 days declined > 20% compared to prior period | high |
 
-建议内容: 排查原因。
+Recommendation: Investigate the cause.
 
-### 响应示例
+### Response Example
 
 ```json
 {
@@ -663,52 +663,52 @@ GET /api/ai/insights/
       "priority": "high",
       "category": "fatigue",
       "icon": "😴",
-      "title": "李佳琦 已连续工作6天",
-      "detail": "过度疲劳会导致直播质量下降和主播流失风险。建议安排调休。",
-      "action": "调整排班",
+      "title": "Li Jiaqi has been working 6 consecutive days",
+      "detail": "Overwork leads to declining stream quality and risk of anchor turnover. Recommend scheduling rest.",
+      "action": "Adjust Schedule",
       "employee_id": 5
     },
     {
       "priority": "high",
       "category": "contract",
       "icon": "📋",
-      "title": "张三 合同15天后到期",
-      "detail": "合同到期日: 2026-06-20。请尽快启动续约沟通。",
-      "action": "查看详情",
+      "title": "Zhang San's contract expires in 15 days",
+      "detail": "Contract expiration date: 2026-06-20. Please initiate renewal discussions as soon as possible.",
+      "action": "View Details",
       "employee_id": 8
     },
     {
       "priority": "high",
       "category": "revenue",
       "icon": "📉",
-      "title": "全盘GMV近期下降28%",
-      "detail": "近7天日均12.5万，之前日均17.4万。需排查原因。",
-      "action": "查看数据驾驶舱"
+      "title": "Overall GMV declined 28% recently",
+      "detail": "Last 7 days daily avg 125K, prior daily avg 174K. Need to investigate the cause.",
+      "action": "View Dashboard"
     },
     {
       "priority": "medium",
       "category": "store",
       "icon": "🏪",
-      "title": "快手专营店 目标达成率仅42%",
-      "detail": "30天GMV 21.0万，月目标50.0万。建议增加直播场次或调整主播配置。",
-      "action": "查看排班",
+      "title": "Kuaishou Specialty Store target achievement rate only 42%",
+      "detail": "30-day GMV 210K, monthly target 500K. Recommend increasing live sessions or adjusting anchor allocation.",
+      "action": "View Schedule",
       "store_id": 3
     },
     {
       "priority": "medium",
       "category": "attendance",
       "icon": "⏰",
-      "title": "王五 近7天迟到3次",
-      "detail": "频繁迟到影响团队纪律和直播准时开播，建议进行沟通。",
-      "action": "查看考勤"
+      "title": "Wang Wu late 3 times in the past 7 days",
+      "detail": "Frequent lateness affects team discipline and timely stream start. Recommend a discussion.",
+      "action": "View Attendance"
     },
     {
       "priority": "medium",
       "category": "leave",
       "icon": "📝",
-      "title": "5条请假申请待审批",
-      "detail": "及时审批可避免排班冲突，影响运营安排。",
-      "action": "去审批"
+      "title": "5 leave requests pending approval",
+      "detail": "Timely approval avoids scheduling conflicts that affect operations.",
+      "action": "Review Requests"
     }
   ],
   "summary": {
@@ -720,49 +720,49 @@ GET /api/ai/insights/
 }
 ```
 
-建议按优先级排序: `high` > `medium` > `low`。
+Recommendations are sorted by priority: `high` > `medium` > `low`.
 
 ---
 
-## 6. AnchorMatcher -- 主播店铺匹配
+## 6. AnchorMatcher -- Anchor-Store Matching
 
-### 接口
+### Endpoint
 
 ```
 GET /api/ai/match/?store_id=1
 ```
 
-| 参数 | 类型 | 必填 | 说明 |
+| Parameter | Type | Required | Description |
 |------|------|------|------|
-| store_id | int | 否 | 指定店铺 (不传则返回所有活跃店铺) |
+| store_id | int | No | Specify store (if omitted, returns all active stores) |
 
-### 算法原理
+### Algorithm
 
-基于最近 30 天的每个主播-店铺组合数据，计算多维匹配评分:
+Based on the last 30 days of data for each anchor-store combination, calculates a multi-dimensional match score:
 
 ```
-score = min(gmv / 100000, 1) * 40          # GMV 贡献 (权重 40)
-      + min(avg_viewers / 5000, 1) * 20    # 流量贡献 (权重 20)
-      + min(avg_conversion / 5, 1) * 20    # 转化贡献 (权重 20)
-      + min(sessions / 10, 1) * 20         # 稳定性 (权重 20)
+score = min(gmv / 100000, 1) * 40          # GMV contribution (weight 40)
+      + min(avg_viewers / 5000, 1) * 20    # Traffic contribution (weight 20)
+      + min(avg_conversion / 5, 1) * 20    # Conversion contribution (weight 20)
+      + min(sessions / 10, 1) * 20         # Stability (weight 20)
 ```
 
-| 维度 | 归一化基准 | 权重 |
+| Dimension | Normalization Baseline | Weight |
 |------|-----------|------|
-| GMV | 10 万元满分 | 40% |
-| 场均观看 | 5000 人满分 | 20% |
-| 转化率 | 5% 满分 | 20% |
-| 场次稳定性 | 10 场满分 | 20% |
+| GMV | 100K for full score | 40% |
+| Avg viewers | 5000 for full score | 20% |
+| Conversion rate | 5% for full score | 20% |
+| Session stability | 10 sessions for full score | 20% |
 
-### 匹配流程
+### Matching Process
 
-1. 获取所有在职主播和活跃店铺
-2. 查询近 30 天所有主播在各店铺的聚合表现
-3. 对每个组合计算匹配评分
-4. 按店铺分组，取各店铺 Top 5 主播
-5. 全局排序取 Top 20 最佳组合
+1. Retrieve all active anchors and active stores
+2. Query aggregated performance for all anchors across each store in the past 30 days
+3. Calculate match score for each combination
+4. Group by store, take Top 5 anchors for each store
+5. Globally sort and take Top 20 best combinations
 
-### 响应示例
+### Response Example
 
 ```json
 {
@@ -770,14 +770,14 @@ score = min(gmv / 100000, 1) * 40          # GMV 贡献 (权重 40)
   "matches": [
     {
       "store_id": 1,
-      "store_name": "旗舰店",
+      "store_name": "Flagship Store",
       "platform": "douyin",
       "top_anchors": [
         {
           "anchor_id": 5,
-          "anchor_name": "李佳琦",
+          "anchor_name": "Li Jiaqi",
           "store_id": 1,
-          "store_name": "旗舰店",
+          "store_name": "Flagship Store",
           "platform": "douyin",
           "gmv": 850000.00,
           "orders": 3800,
@@ -791,7 +791,7 @@ score = min(gmv / 100000, 1) * 40          # GMV 贡献 (权重 40)
     },
     {
       "store_id": 2,
-      "store_name": "美妆专营店",
+      "store_name": "Beauty Specialty Store",
       "platform": "taobao",
       "top_anchors": [],
       "has_data": false
@@ -800,9 +800,9 @@ score = min(gmv / 100000, 1) * 40          # GMV 贡献 (权重 40)
   "best_combos": [
     {
       "anchor_id": 5,
-      "anchor_name": "李佳琦",
+      "anchor_name": "Li Jiaqi",
       "store_id": 1,
-      "store_name": "旗舰店",
+      "store_name": "Flagship Store",
       "platform": "douyin",
       "gmv": 850000.00,
       "orders": 3800,
@@ -817,27 +817,27 @@ score = min(gmv / 100000, 1) * 40          # GMV 贡献 (权重 40)
 
 ---
 
-## 缓存策略
+## Caching Strategy
 
-所有 AI 接口的计算结果均通过 Django 缓存框架缓存，缓存键由接口名称和参数哈希生成:
+All AI engine computation results are cached through the Django caching framework. Cache keys are generated from the engine name and a hash of the parameters:
 
 ```
 cache_key = "ai:{engine_name}:{md5(sorted_params_json)}"
 ```
 
-| 引擎 | 缓存时间 | 说明 |
+| Engine | Cache Duration | Rationale |
 |------|---------|------|
-| GMVPredictor | 120 秒 | GMV 趋势短期稳定 |
-| SmartScheduler | 120 秒 | 排班推荐日内有效 |
-| AnchorProfiler | 180 秒 | 画像变化较慢 |
-| AnomalyDetector | 120 秒 | 异常检测需一定时效 |
-| InsightEngine | 120 秒 | 建议扫描较重 |
-| AnchorMatcher | 180 秒 | 匹配结果较稳定 |
+| GMVPredictor | 120 seconds | GMV trends are stable in the short term |
+| SmartScheduler | 120 seconds | Scheduling recommendations are valid within the day |
+| AnchorProfiler | 180 seconds | Profile changes are relatively slow |
+| AnomalyDetector | 120 seconds | Anomaly detection requires timeliness |
+| InsightEngine | 120 seconds | Insight scanning is computationally heavy |
+| AnchorMatcher | 180 seconds | Match results are relatively stable |
 
-**缓存失效:** 核心业务数据变更时 (创建/更新/删除)，自动清除关联缓存:
+**Cache Invalidation:** When core business data changes (create/update/delete), related caches are automatically cleared:
 
 ```python
 invalidate_cache('dashboard', 'daily_gmv', 'store_overview')
 ```
 
-**生产环境建议:** 将缓存后端从 `LocMemCache` 切换为 `Redis`，以获得持久化和跨进程共享能力。
+**Production Recommendation:** Switch the cache backend from `LocMemCache` to `Redis` for persistence and cross-process sharing.

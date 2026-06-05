@@ -1,155 +1,140 @@
 <div align="center">
 
-# MCN 管家
+# MCN Manager
 
-### 🎬 直播电商代运营管理系统
+### 🎬 Open-Source Live Streaming Commerce Management System
 
-**一个开箱即用的全栈 MCN 管理系统，覆盖直播电商全链路业务场景**
+**A full-stack MCN management system covering the entire live streaming commerce value chain**
+
+[English](#) · [中文文档](docs/README.md)
 
 [![Python](https://img.shields.io/badge/Python-3.12+-3776AB?logo=python&logoColor=white)](https://python.org)
 [![Django](https://img.shields.io/badge/Django-6.0-092E20?logo=django&logoColor=white)](https://djangoproject.com)
 [![Vue](https://img.shields.io/badge/Vue-3.5-4FC08D?logo=vue.js&logoColor=white)](https://vuejs.org)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-[功能预览](#-功能预览) · [快速开始](#-快速开始) · [技术架构](#-技术架构) · [API 文档](docs/api.md) · [部署指南](docs/deployment.md) · [贡献指南](CONTRIBUTING.md)
+[Features](#-features) · [Quick Start](#-quick-start) · [Architecture](#-architecture) · [API Docs](docs/api.md) · [Deployment](docs/deployment.md) · [Contributing](CONTRIBUTING.md)
 
 ---
 
 </div>
 
-## 📸 界面预览
+## ✨ Features
 
-| 数据驾驶舱 | AI 智能中心 |
-|:---:|:---:|
-| 实时 GMV / 平台分布 / 主播排行 / 趋势分析 | GMV 预测 / 智能排班 / 主播画像 / 异常检测 |
-| ![Dashboard](docs/screenshots/dashboard.png) | ![AI Center](docs/screenshots/ai.png) |
+### 🧠 AI Engine (6 Capabilities)
 
-| 店铺管理 | 智能排班 |
-|:---:|:---:|
-| 多平台店铺聚合管理 / GMV 达成率可视化 | 周视图网格 / 批量排班 / 冲突检测 |
-| ![Stores](docs/screenshots/stores.png) | ![Schedules](docs/screenshots/schedules.png) |
+| Feature | Description |
+|---------|-------------|
+| **GMV Prediction** | Linear regression + moving average + seasonal adjustment, predict 1-30 day GMV |
+| **Smart Scheduling** | Greedy matching algorithm considering anchor performance, fatigue, and tardiness |
+| **Anchor Profiling** | 5-dimension radar (sales/traffic/conversion/stability/growth) + AI insights |
+| **Anomaly Detection** | Z-Score statistics + rule engine for automatic anomaly detection |
+| **Operation Insights** | 25+ real-time alerts (store health, anchor fatigue, contract expiry, etc.) |
+| **Smart Matching** | Anchor-store combination scoring to find the best partners |
 
----
+> Pure algorithm engine, no external AI API required, works out of the box.
 
-## ✨ 功能预览
+### 🏢 Core Business (8 Modules)
 
-### 🧠 AI 智能引擎 (6大能力)
+| Module | Page | Key Features |
+|--------|------|-------------|
+| Dashboard | Dashboard | 4-dimension stats / 7-day GMV trend / platform distribution / TOP8 anchors |
+| Store Management | Stores | Multi-platform (Douyin/Kuaishou/Taobao/etc.) / GMV achievement rate / CRUD |
+| Employee Management | Employees | Dual view (card+table) / Anchor profiles / Role filtering / Team management |
+| Smart Scheduling | Schedules | Weekly grid view / Batch scheduling / Conflict detection |
+| Attendance | Attendance | Auto late detection / Statistics / Late TOP5 / Leave approval |
+| Live Sessions | Sessions | Daily GMV trend / Anchor ranking / Full CRUD |
+| Performance Review | Reviews | S/A/B/C/D grading / Auto-calculation / Bonus |
+| Shift Config | Shifts | Card view / 5 shift types / Custom time ranges |
 
-| 功能 | 说明 |
-|------|------|
-| **GMV 预测** | 线性回归 + 移动平均 + 季节性调整，预测未来1-30天GMV |
-| **智能排班** | 贪心匹配算法，考虑主播表现/疲劳度/迟到率，自动推荐最优排班 |
-| **主播画像** | 五维能力雷达 (销售力/流量力/转化力/稳定性/成长性) + AI洞察 |
-| **异常检测** | Z-Score 统计 + 规则引擎，自动发现 GMV/流量/转化异常 |
-| **运营建议** | 25+ 条实时告警 (店铺健康/主播疲劳/合同到期/考勤/GMV趋势) |
-| **智能匹配** | 主播-店铺组合评分，找到最佳搭档 |
+### 🚀 Extended Features (52 Modules)
 
-> 纯算法引擎，无需外部 AI API，开箱即用。
-
-### 🏢 核心业务 (8大模块)
-
-| 模块 | 页面 | 核心能力 |
-|------|------|---------|
-| 数据驾驶舱 | Dashboard | 4维统计卡 / 7天GMV趋势 / 平台分布 / TOP8主播 / 今日排班 |
-| 店铺管理 | Stores | 多平台 (抖音/快手/淘宝等) / GMV达成率 / 搜索筛选 / CRUD |
-| 人员管理 | Employees | 双视图 (卡片+表格) / 主播档案 / 角色筛选 / 团队管理 |
-| 智能排班 | Schedules | 周视图网格 / 批量排班 / 冲突检测 / 今日高亮 |
-| 考勤打卡 | Attendance | 自动迟到检测 / 考勤统计 / 迟到TOP5 / 请假审批 |
-| 直播业绩 | Sessions | 每日GMV趋势 / 主播排行 / 完整直播记录CRUD |
-| 绩效考核 | Reviews | S/A/B/C/D评级 / 自动计算 (GMV 60%+出勤 20%+时长 10%+订单 10%) / 奖金 |
-| 班次配置 | Shifts | 卡片视图 / 5种班次类型 / 自定义时间段 |
-
-### 🚀 扩展功能 (12大模块)
-
-| 模块 | 页面 | 说明 |
-|------|------|------|
-| 商品管理 | Products | 商品库CRUD / 库存预警 / 佣金设置 |
-| 直播工具 | Scripts | 直播脚本 (段落式) / 话术库 (场景分类) |
-| 任务看板 | Tasks | 四列看板 (待办/进行中/已完成/阻塞) |
-| 消息中心 | Notifications | 系统通知 / 排班提醒 / 未读标记 / 全部已读 |
-| 财务中心 | Finance | 收支管理 / 佣金结算 / 合同管理 (到期预警) |
-| 营销活动 | Campaigns | 活动管理 / 目标GMV / 完成率追踪 |
-| 竞品监控 | Competitor | 竞品信息 / 数据追踪 / 粉丝分析 |
-| 达人对接 | KOL | KOL资源管理 / 合作状态 / 费用评估 |
-| 培训目标 | Training | 培训课程 / 考核记录 / 目标看板 (周/月/季/年) |
-| 实时大屏 | Billboard | TV投屏模式 / 30s自动刷新 / TOP排行 |
-| 系统工具 | Settings | CSV数据导出 / 操作日志 |
-| 权限管理 | - | 角色定义 / 权限绑定 (预留) |
+| Category | Modules |
+|----------|---------|
+| **Merchandising** | Product Management, Product Selection, Sample Management, Flash Sales, Coupons |
+| **Operations** | Live Scripts, Script Tags, Live Interactions, Room Decoration, Stream Scenes, Stream Plans |
+| **Marketing** | Ad Campaigns, Short Videos, Campaigns, Competitor Rooms, Traffic Analysis |
+| **Community** | Fan Groups, User Personas, KOL Contacts, Gifts/Rewards |
+| **Finance** | Finance Center, Revenue Sharing, Settlements, Tax Records, Expenses, Inventories |
+| **HR & Legal** | Sign Contracts, Contract Ledger, Authorizations, Negotiations, Investments, Logistics |
+| **Monitoring** | Stream Alerts, Compliance Review, Public Opinion, Data Warnings, Return Analysis |
+| **Collaboration** | Task Board, Notifications, Knowledge Base, Customer Complaints, After-Sales, AB Testing |
+| **Administration** | Roles & Permissions, Operation Logs, Data Reports, Data Export, Billboard |
 
 ---
 
-## 🛠 技术架构
+## 🛠 Architecture
 
 ```
 ┌──────────────────────────────────────────────────┐
-│                    前端层                          │
+│                 Frontend Layer                     │
 │   Vue 3 · Element Plus · ECharts · Pinia · Router │
 │          Vite Build · Tree-shaking · Code-split   │
 ├──────────────────────────────────────────────────┤
-│                    网关层                          │
+│                 Gateway Layer                      │
 │        Vite Proxy · Waitress · Django WSGI        │
-│        JWT 认证 · 限流 100/min · CORS              │
+│        JWT Auth · Rate Limit 100/min · CORS       │
 ├──────────────────────────────────────────────────┤
-│                   Service 层                       │
+│                 Service Layer                      │
 │   Dashboard · Store · Employee · Schedule · ...   │
-│        缓存装饰器 · 写操作自动缓存失效               │
+│        Cache Decorator · Auto Cache Invalidation  │
 ├──────────────────────────────────────────────────┤
-│                 AI Engine 智能层                    │
-│   GMV预测 · 智能排班 · 主播画像 · 异常检测          │
-│        运营建议 · 智能匹配 · 结果缓存               │
+│               AI Engine Layer                      │
+│   GMV Predict · Smart Schedule · Anchor Profile   │
+│   Anomaly Detect · Insights · Smart Match         │
 ├──────────────────────────────────────────────────┤
-│                  数据层                             │
-│   40 个 Model · 20+ 索引 · select_related          │
+│                  Data Layer                        │
+│   83 Models · 20+ Indexes · select_related         │
 │   SQLite WAL · 64MB Cache · 256MB mmap            │
 └──────────────────────────────────────────────────┘
 ```
 
-| 层 | 技术 | 说明 |
-|---|------|------|
-| 前端 | Vue 3 + Element Plus | Composition API · defineAsyncComponent 按需加载 |
-| 图表 | ECharts 6 | Tree-shaking (仅引入 BarChart/LineChart/PieChart) |
-| 状态 | Pinia | 全局 Dashboard 缓存 · 30s 客户端 TTL |
-| 路由 | Vue Router 4 | createWebHistory · lazy loading · fade transition |
-| 构建 | Vite 8 | manualChunks 分包 (element-plus/echarts/vendor) |
-| 后端 | Django 6 + DRF | Service 层分离 · JSON-only · 分页50条 |
-| 缓存 | LocMemCache → Redis | 10000条上限 · 写操作自动失效 |
-| 数据库 | SQLite WAL → PostgreSQL | 64MB cache · 256MB mmap · 30s timeout |
-| WSGI | Waitress | Windows 友好 · 生产就绪 |
+| Layer | Tech | Notes |
+|-------|------|-------|
+| Frontend | Vue 3 + Element Plus | Composition API · Lazy loading |
+| Charts | ECharts 6 | Tree-shaking (Bar/Line/Pie only) |
+| State | Pinia | Global Dashboard cache · 30s client TTL |
+| Router | Vue Router 4 | History mode · lazy loading · fade transition |
+| Build | Vite 8 | Manual chunks (element-plus/echarts/vendor) |
+| Backend | Django 6 + DRF | Service layer · JSON-only · 50 per page |
+| Cache | LocMemCache → Redis | 10000 max entries · auto invalidation |
+| Database | SQLite WAL → PostgreSQL | 64MB cache · 256MB mmap · 30s timeout |
+| WSGI | Waitress | Windows-friendly · Production-ready |
 
 ---
 
-## 🚀 快速开始
+## 🚀 Quick Start
 
-### 环境要求
+### Prerequisites
 
 - Python 3.12+
 - Node.js 18+ / npm 9+
 
-### 一键启动
+### Setup
 
 ```bash
-# 1. 克隆项目
-git clone https://github.com/yourname/mcn-manager.git
+# 1. Clone the repository
+git clone https://github.com/CodingFervor/mcn-manager.git
 cd mcn-manager
 
-# 2. 后端
+# 2. Backend
 cd anchor_system
 pip install -r requirements.txt
 python manage.py migrate
-python manage.py seed_data    # 可选: 导入示例数据 (20品牌/50店铺/100主播)
+python manage.py seed_data    # Optional: import sample data (20 brands / 50 stores / 100 anchors)
 python manage.py runserver 8000
 
-# 3. 前端 (新终端)
+# 3. Frontend (new terminal)
 cd frontend
 npm install
-npm run dev    # 访问 http://127.0.0.1:5173
+npm run dev    # Visit http://127.0.0.1:5173
 ```
 
-### 默认账号
+### Default Account
 
-种子数据创建的管理员: `admin` / `admin123`
+Seed data creates admin user: `admin` / `admin123`
 
-### Docker 部署 (规划中)
+### Docker Deployment (Planned)
 
 ```bash
 docker-compose up -d
@@ -157,120 +142,123 @@ docker-compose up -d
 
 ---
 
-## 📊 性能
+## 📊 Performance
 
-| 指标 | 数值 | 说明 |
-|------|------|------|
-| Dashboard API | 2ms | 缓存命中 |
-| Store Overview | 2.5ms | 缓存命中 |
-| AI Insights | 3ms | 缓存命中 (冷启动 ~500ms) |
-| AI Schedule | 2.5ms | 缓存命中 (冷启动 ~240ms) |
-| AI Predict | 6ms | 冷启动 |
-| 前端 Build | 1.6s | Vite + Tree-shaking |
-| 健康检查 | 1ms | DB + Cache |
+| Metric | Value | Notes |
+|--------|-------|-------|
+| Dashboard API | 2ms | Cache hit |
+| Store Overview | 2.5ms | Cache hit |
+| AI Insights | 3ms | Cache hit (cold start ~500ms) |
+| AI Schedule | 2.5ms | Cache hit (cold start ~240ms) |
+| AI Predict | 6ms | Cold start |
+| Frontend Build | ~2.7s | Vite + Tree-shaking |
+| Health Check | 1ms | DB + Cache |
 
 ---
 
-## 📁 项目结构
+## 📁 Project Structure
 
 ```
 mcn-manager/
-├── anchor_system/              # 后端 Django 项目
+├── anchor_system/              # Django Backend
 │   ├── backend/
-│   │   ├── settings.py         # 配置 (DB/Cache/Limit/Log)
-│   │   ├── middleware.py        # 请求计时 + 健康检查
-│   │   └── urls.py              # 根路由
+│   │   ├── settings.py         # Config (DB/Cache/Limit/Log)
+│   │   ├── middleware.py        # Request timing + Health check
+│   │   └── urls.py              # Root URL config
 │   ├── scheduling/
-│   │   ├── models.py            # 核心模型 (13个)
-│   │   ├── models_extra.py      # 扩展模型 (27个)
-│   │   ├── services.py          # Service 业务层
-│   │   ├── ai_engine.py         # AI 智能引擎
-│   │   ├── views.py             # 核心视图
-│   │   ├── views_extra.py       # 扩展视图
-│   │   ├── ai_views.py          # AI 接口
-│   │   ├── serializers.py       # 核心序列化器
-│   │   └── serializers_extra.py # 扩展序列化器
+│   │   ├── models.py            # Core models (14)
+│   │   ├── models_extra.py      # Extended models (27)
+│   │   ├── models_extra2.py     # Monitoring & ops (10)
+│   │   ├── models_extra3.py     # Business features (10)
+│   │   ├── models_extra4.py     # Advanced features (20)
+│   │   ├── services.py          # Service business layer
+│   │   ├── ai_engine.py         # AI Engine
+│   │   ├── views.py             # Core views
+│   │   ├── views_extra.py       # Extended views
+│   │   ├── ai_views.py          # AI endpoints
+│   │   ├── serializers.py       # Core serializers
+│   │   └── serializers_extra.py # Extended serializers
 │   ├── manage.py
 │   └── requirements.txt
 │
-├── frontend/                   # 前端 Vue 项目
+├── frontend/                   # Vue Frontend
 │   ├── src/
-│   │   ├── views/               # 21 个页面
-│   │   ├── components/          # 可复用组件 (StatCard/PageHeader/ChartWrap)
+│   │   ├── views/               # 60 pages
+│   │   ├── components/          # Reusable components (StatCard/PageHeader/ChartWrap)
 │   │   ├── composables/         # Hooks (useApi/useChart)
 │   │   ├── stores/              # Pinia Store
-│   │   ├── router/              # 路由配置
-│   │   ├── api.js               # API 模块 (20+)
+│   │   ├── router/              # Route config
+│   │   ├── api.js               # API modules (55+)
 │   │   ├── echarts.js           # ECharts Tree-shaking
-│   │   ├── style.css            # 暗色霓虹设计系统
-│   │   ├── main.js              # 入口
-│   │   └── App.vue              # 布局外壳
+│   │   ├── style.css            # Dark neon design system
+│   │   ├── main.js              # Entry point
+│   │   └── App.vue              # Layout shell
 │   ├── vite.config.js
 │   └── package.json
 │
-├── docs/                        # 文档
-│   ├── architecture.md          # 系统架构
-│   ├── api.md                   # API 接口文档
-│   ├── models.md                # 数据模型文档
-│   ├── ai-engine.md             # AI 引擎文档
-│   ├── frontend.md              # 前端页面文档
-│   ├── deployment.md            # 部署运维文档
-│   └── screenshots/             # 截图
+├── docs/                        # Documentation
+│   ├── architecture.md          # System architecture
+│   ├── api.md                   # API reference
+│   ├── models.md                # Data models
+│   ├── ai-engine.md             # AI engine docs
+│   ├── frontend.md              # Frontend docs
+│   ├── deployment.md            # Deployment guide
+│   └── screenshots/             # Screenshots
 │
-├── CONTRIBUTING.md              # 贡献指南
-├── CHANGELOG.md                 # 更新日志
-├── LICENSE                      # MIT 许可证
-└── README.md                    # 本文件
+├── CONTRIBUTING.md              # Contributing guide
+├── CHANGELOG.md                 # Changelog
+├── LICENSE                      # MIT License
+└── README.md                    # This file
 ```
 
 ---
 
-## 📖 文档
+## 📖 Documentation
 
-| 文档 | 说明 |
-|------|------|
-| [系统架构](docs/architecture.md) | 分层架构、技术选型、项目结构 |
-| [快速开始](#-快速开始) | 安装、配置、启动 |
-| [API 文档](docs/api.md) | 70+ 接口完整说明 |
-| [数据模型](docs/models.md) | 40 个模型字段定义 |
-| [AI 引擎](docs/ai-engine.md) | 6 大算法原理与使用 |
-| [前端页面](docs/frontend.md) | 21 个页面、设计系统、组件 |
-| [部署指南](docs/deployment.md) | 生产部署、Nginx、PostgreSQL、Redis |
-| [贡献指南](CONTRIBUTING.md) | 如何参与开发 |
-| [更新日志](CHANGELOG.md) | 版本历史 |
-
----
-
-## 🤝 贡献
-
-欢迎贡献！请阅读 [贡献指南](CONTRIBUTING.md)。
-
-1. Fork 本仓库
-2. 创建功能分支 (`git checkout -b feature/amazing-feature`)
-3. 提交更改 (`git commit -m 'Add amazing feature'`)
-4. 推送到分支 (`git push origin feature/amazing-feature`)
-5. 提交 Pull Request
+| Document | Description |
+|----------|-------------|
+| [Architecture](docs/architecture.md) | Layered architecture, tech stack, project structure |
+| [Quick Start](#-quick-start) | Installation, configuration, launch |
+| [API Reference](docs/api.md) | 90+ endpoints full reference |
+| [Data Models](docs/models.md) | 83 model field definitions |
+| [AI Engine](docs/ai-engine.md) | 6 algorithm principles and usage |
+| [Frontend](docs/frontend.md) | 60 pages, design system, components |
+| [Deployment](docs/deployment.md) | Production deploy, Nginx, PostgreSQL, Redis |
+| [Contributing](CONTRIBUTING.md) | How to contribute |
+| [Changelog](CHANGELOG.md) | Version history |
 
 ---
 
-## 📄 许可证
+## 🤝 Contributing
+
+Contributions are welcome! Please read the [Contributing Guide](CONTRIBUTING.md).
+
+1. Fork this repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Submit a Pull Request
+
+---
+
+## 📄 License
 
 [MIT License](LICENSE)
 
 ---
 
-## 🙏 致谢
+## 🙏 Acknowledgments
 
-- [Django](https://www.djangoproject.com/) — Web 框架
-- [Vue.js](https://vuejs.org/) — 前端框架
-- [Element Plus](https://element-plus.org/) — UI 组件库
-- [ECharts](https://echarts.apache.org/) — 数据可视化
-- [Waitress](https://docs.pylonsproject.org/projects/waitress/) — WSGI 服务器
+- [Django](https://www.djangoproject.com/) — Web framework
+- [Vue.js](https://vuejs.org/) — Frontend framework
+- [Element Plus](https://element-plus.org/) — UI component library
+- [ECharts](https://echarts.apache.org/) — Data visualization
+- [Waitress](https://docs.pylonsproject.org/projects/waitress/) — WSGI server
 
 ---
 
 <div align="center">
 
-**如果这个项目对你有帮助，请给个 ⭐ Star 支持一下！**
+**If this project helps you, please give it a ⭐ Star!**
 
 </div>

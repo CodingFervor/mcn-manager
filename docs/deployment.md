@@ -1,118 +1,118 @@
-# MCN Manager 部署运维指南
+# MCN Manager Deployment & Operations Guide
 
-> 版本: 1.0 | 适用环境: 开发 / 测试 / 生产
-
----
-
-## 目录
-
-- [环境要求](#环境要求)
-- [后端部署](#后端部署)
-- [前端部署](#前端部署)
-- [生产环境配置](#生产环境配置)
-- [Docker Compose 部署](#docker-compose-部署)
-- [健康检查](#健康检查)
-- [监控与日志](#监控与日志)
-- [数据备份与恢复](#数据备份与恢复)
-- [常见问题](#常见问题)
+> Version: 1.0 | Target Environments: Development / Testing / Production
 
 ---
 
-## 环境要求
+## Table of Contents
 
-### 开发环境
+- [Environment Requirements](#environment-requirements)
+- [Backend Deployment](#backend-deployment)
+- [Frontend Deployment](#frontend-deployment)
+- [Production Environment Configuration](#production-environment-configuration)
+- [Docker Compose Deployment](#docker-compose-deployment)
+- [Health Check](#health-check)
+- [Monitoring & Logging](#monitoring--logging)
+- [Data Backup & Recovery](#data-backup--recovery)
+- [FAQ](#faq)
 
-| 依赖 | 最低版本 | 推荐版本 | 说明 |
+---
+
+## Environment Requirements
+
+### Development Environment
+
+| Dependency | Minimum Version | Recommended Version | Description |
 |------|---------|---------|------|
-| Python | 3.12 | 3.12+ | 后端运行时 |
-| Node.js | 18.0 | 20 LTS | 前端构建 |
-| npm | 9.0 | 10+ | 包管理器 |
-| Git | 2.30 | 最新 | 版本控制 |
+| Python | 3.12 | 3.12+ | Backend runtime |
+| Node.js | 18.0 | 20 LTS | Frontend build |
+| npm | 9.0 | 10+ | Package manager |
+| Git | 2.30 | Latest | Version control |
 
-### 生产环境 (推荐)
+### Production Environment (Recommended)
 
-| 组件 | 说明 | 推荐配置 |
+| Component | Description | Recommended Configuration |
 |------|------|---------|
-| 操作系统 | Ubuntu 22.04 LTS / CentOS 8+ | 2核 4GB 起步 |
-| PostgreSQL | 15+ (替代 SQLite) | 高并发必选 |
-| Redis | 7+ (缓存) | 替代 LocMemCache |
-| Nginx | 1.24+ | 反向代理 + 静态文件 |
-| Gunicorn | WSGI 服务器 | 多 worker 部署 |
+| Operating System | Ubuntu 22.04 LTS / CentOS 8+ | 2 cores, 4GB minimum |
+| PostgreSQL | 15+ (replaces SQLite) | Required for high concurrency |
+| Redis | 7+ (caching) | Replaces LocMemCache |
+| Nginx | 1.24+ | Reverse proxy + static files |
+| Gunicorn | WSGI server | Multi-worker deployment |
 
 ---
 
-## 后端部署
+## Backend Deployment
 
-### 1. 安装依赖
+### 1. Install Dependencies
 
 ```bash
 cd anchor_system
 pip install -r requirements.txt
 ```
 
-**核心依赖清单:**
+**Core Dependencies:**
 
-| 包名 | 用途 |
+| Package | Purpose |
 |------|------|
-| Django 6.0+ | Web 框架 |
-| djangorestframework | REST API 框架 |
-| django-cors-headers | CORS 跨域支持 |
-| djangorestframework-simplejwt | JWT 认证 |
-| django-redis | Redis 缓存后端 (可选) |
-| waitress | WSGI 服务器 (Windows 兼容) |
-| gunicorn | WSGI 服务器 (Linux 推荐) |
+| Django 6.0+ | Web framework |
+| djangorestframework | REST API framework |
+| django-cors-headers | CORS support |
+| djangorestframework-simplejwt | JWT authentication |
+| django-redis | Redis cache backend (optional) |
+| waitress | WSGI server (Windows compatible) |
+| gunicorn | WSGI server (Linux recommended) |
 
-### 2. 初始化数据库
+### 2. Initialize Database
 
 ```bash
 python manage.py migrate
 ```
 
-首次运行会自动创建 `db.sqlite3` 并执行全部迁移。
+On first run, this automatically creates `db.sqlite3` and executes all migrations.
 
-### 3. 导入种子数据 (可选)
+### 3. Import Seed Data (Optional)
 
 ```bash
 python manage.py seed_data
 ```
 
-种子数据规模:
+Seed data scale:
 
-| 数据 | 数量 |
+| Data | Count |
 |------|------|
-| 品牌 | 20 |
-| 店铺 | 50 |
-| 直播间 | 102 |
-| 团队 | 8 |
-| 员工 (主播) | 100 |
-| 员工 (运营) | 80 |
-| 员工 (经理) | 5 |
-| 班次 | 4 |
-| 排班记录 | ~2500 |
-| 考勤记录 | ~2200 |
-| 直播场次 | 336 |
-| 商品销售 | 1146 |
-| 请假申请 | 15 |
+| Brands | 20 |
+| Stores | 50 |
+| Live Rooms | 102 |
+| Teams | 8 |
+| Employees (Anchors) | 100 |
+| Employees (Operators) | 80 |
+| Employees (Managers) | 5 |
+| Shifts | 4 |
+| Schedule Records | ~2500 |
+| Attendance Records | ~2200 |
+| Live Sessions | 336 |
+| Product Sales | 1146 |
+| Leave Requests | 15 |
 
-### 4. 创建管理员账号
+### 4. Create Admin Account
 
 ```bash
 python manage.py createsuperuser
 ```
 
-按提示输入用户名、邮箱和密码。
+Follow the prompts to enter username, email, and password.
 
-### 5. 启动后端服务
+### 5. Start Backend Service
 
-**开发模式:**
+**Development Mode:**
 
 ```bash
 python manage.py runserver 8000
 ```
 
-访问 `http://127.0.0.1:8000/api/` 验证接口可用。
+Visit `http://127.0.0.1:8000/api/` to verify API availability.
 
-**生产模式 (Linux -- Gunicorn):**
+**Production Mode (Linux -- Gunicorn):**
 
 ```bash
 gunicorn backend.wsgi:application \
@@ -123,7 +123,7 @@ gunicorn backend.wsgi:application \
   --error-logfile -
 ```
 
-**生产模式 (Windows -- Waitress):**
+**Production Mode (Windows -- Waitress):**
 
 ```bash
 python -m waitress --port=8000 --threads=4 backend.wsgi:application
@@ -131,32 +131,32 @@ python -m waitress --port=8000 --threads=4 backend.wsgi:application
 
 ---
 
-## 前端部署
+## Frontend Deployment
 
-### 1. 安装依赖
+### 1. Install Dependencies
 
 ```bash
 cd frontend
 npm install
 ```
 
-### 2. 开发模式
+### 2. Development Mode
 
 ```bash
 npm run dev
 ```
 
-Vite 开发服务器启动于 `http://127.0.0.1:5173`，自动代理 `/api` 请求到后端 `8000` 端口。
+The Vite development server starts at `http://127.0.0.1:5173` and automatically proxies `/api` requests to the backend on port 8000.
 
-### 3. 生产构建
+### 3. Production Build
 
 ```bash
 npm run build
 ```
 
-构建产物输出到 `dist/` 目录，包含压缩后的 HTML、JS、CSS 及静态资源。
+Build output goes to the `dist/` directory, containing minified HTML, JS, CSS, and static assets.
 
-### 4. 预览构建产物
+### 4. Preview Build Output
 
 ```bash
 npm run preview
@@ -164,9 +164,9 @@ npm run preview
 
 ---
 
-## 生产环境配置
+## Production Environment Configuration
 
-### Nginx 配置
+### Nginx Configuration
 
 ```nginx
 upstream mcn_backend {
@@ -177,24 +177,24 @@ server {
     listen 80;
     server_name your-domain.com;
 
-    # 安全头
+    # Security headers
     add_header X-Frame-Options DENY;
     add_header X-Content-Type-Options nosniff;
     add_header X-XSS-Protection "1; mode=block";
 
-    # 前端静态文件
+    # Frontend static files
     location / {
         root /opt/mcn/frontend/dist;
         try_files $uri $uri/ /index.html;
 
-        # 静态资源缓存 (JS/CSS/图片)
+        # Static asset caching (JS/CSS/images)
         location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff2?)$ {
             expires 30d;
             add_header Cache-Control "public, immutable";
         }
     }
 
-    # API 反向代理
+    # API reverse proxy
     location /api/ {
         proxy_pass http://mcn_backend;
         proxy_set_header Host $host;
@@ -202,21 +202,21 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
 
-        # 超时设置 (AI 接口可能较慢)
+        # Timeout settings (AI endpoints may be slow)
         proxy_connect_timeout 30s;
         proxy_read_timeout 120s;
     }
 
-    # 静态文件 (Django admin 等)
+    # Static files (Django admin, etc.)
     location /static/ {
         alias /opt/mcn/anchor_system/static/;
     }
 }
 ```
 
-### PostgreSQL 配置
+### PostgreSQL Configuration
 
-**安装:**
+**Installation:**
 
 ```bash
 sudo apt install postgresql postgresql-contrib
@@ -224,7 +224,7 @@ sudo -u postgres createuser mcn_user -P
 sudo -u postgres createdb mcn_db -O mcn_user
 ```
 
-**Django 配置 (`settings.py`):**
+**Django Configuration (`settings.py`):**
 
 ```python
 DATABASES = {
@@ -243,28 +243,28 @@ DATABASES = {
 }
 ```
 
-**安装依赖:**
+**Install Dependency:**
 
 ```bash
 pip install psycopg2-binary
 ```
 
-**迁移:**
+**Run Migrations:**
 
 ```bash
 python manage.py migrate
 ```
 
-### Redis 配置
+### Redis Configuration
 
-**安装:**
+**Installation:**
 
 ```bash
 sudo apt install redis-server
 sudo systemctl enable redis-server
 ```
 
-**Django 配置 (`settings.py`):**
+**Django Configuration (`settings.py`):**
 
 ```python
 CACHES = {
@@ -283,54 +283,54 @@ CACHES = {
 }
 ```
 
-**安装依赖:**
+**Install Dependency:**
 
 ```bash
 pip install django-redis
 ```
 
-### Gunicorn 配置
+### Gunicorn Configuration
 
-推荐使用配置文件 `gunicorn.conf.py`:
+Recommended configuration file `gunicorn.conf.py`:
 
 ```python
 # gunicorn.conf.py
 import multiprocessing
 
 bind = "0.0.0.0:8000"
-workers = multiprocessing.cpu_count() * 2 + 1  # 推荐公式
+workers = multiprocessing.cpu_count() * 2 + 1  # Recommended formula
 worker_class = "sync"
 timeout = 120
 keepalive = 5
-max_requests = 1000          # 内存泄漏防护
+max_requests = 1000          # Memory leak protection
 max_requests_jitter = 50
 accesslog = "-"
 errorlog = "-"
 loglevel = "info"
 ```
 
-启动:
+Start:
 
 ```bash
 gunicorn backend.wsgi:application -c gunicorn.conf.py
 ```
 
-### 生产环境安全检查清单
+### Production Security Checklist
 
-| 项目 | 配置 |
+| Item | Configuration |
 |------|------|
-| `DEBUG` | 设为 `False` |
-| `SECRET_KEY` | 使用环境变量注入，不硬编码 |
-| `ALLOWED_HOSTS` | 设为实际域名/IP |
-| `CORS_ALLOW_ALL_ORIGINS` | 设为 `False`，配置白名单 |
-| HTTPS | 配置 SSL 证书 (Let's Encrypt) |
-| 防火墙 | 仅开放 80/443 端口 |
+| `DEBUG` | Set to `False` |
+| `SECRET_KEY` | Inject via environment variable, do not hardcode |
+| `ALLOWED_HOSTS` | Set to actual domain/IP |
+| `CORS_ALLOW_ALL_ORIGINS` | Set to `False`, configure whitelist |
+| HTTPS | Configure SSL certificate (Let's Encrypt) |
+| Firewall | Only open ports 80/443 |
 
 ---
 
-## Docker Compose 部署
+## Docker Compose Deployment
 
-`docker-compose.yml` 示例:
+Example `docker-compose.yml`:
 
 ```yaml
 version: "3.8"
@@ -401,7 +401,7 @@ volumes:
   pgdata:
 ```
 
-**后端 Dockerfile** (`anchor_system/Dockerfile`):
+**Backend Dockerfile** (`anchor_system/Dockerfile`):
 
 ```dockerfile
 FROM python:3.12-slim
@@ -418,7 +418,7 @@ EXPOSE 8000
 CMD ["gunicorn", "backend.wsgi:application", "-b", "0.0.0.0:8000", "-w", "4"]
 ```
 
-**前端 Dockerfile** (`frontend/Dockerfile`):
+**Frontend Dockerfile** (`frontend/Dockerfile`):
 
 ```dockerfile
 FROM node:20-alpine AS builder
@@ -435,13 +435,13 @@ EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
 ```
 
-**启动:**
+**Start:**
 
 ```bash
 docker compose up -d
 ```
 
-**初始化数据:**
+**Initialize Data:**
 
 ```bash
 docker compose exec backend python manage.py migrate
@@ -451,17 +451,17 @@ docker compose exec backend python manage.py seed_data
 
 ---
 
-## 健康检查
+## Health Check
 
-### API 健康检查
+### API Health Check
 
-系统内置健康检查中间件，检测数据库和缓存连接状态:
+The system includes a built-in health check middleware that tests database and cache connectivity:
 
 ```bash
 curl http://127.0.0.1:8000/api/health/
 ```
 
-正常响应:
+Healthy response:
 
 ```json
 {
@@ -474,7 +474,7 @@ curl http://127.0.0.1:8000/api/health/
 }
 ```
 
-异常响应:
+Unhealthy response:
 
 ```json
 {
@@ -487,9 +487,9 @@ curl http://127.0.0.1:8000/api/health/
 }
 ```
 
-### 外部监控集成
+### External Monitoring Integration
 
-**cron 定时检查 (每分钟):**
+**Cron-based check (every minute):**
 
 ```bash
 * * * * * curl -sf http://127.0.0.1:8000/api/health/ > /dev/null || echo "MCN API DOWN" | mail -s "MCN Alert" admin@example.com
@@ -497,26 +497,26 @@ curl http://127.0.0.1:8000/api/health/
 
 ---
 
-## 监控与日志
+## Monitoring & Logging
 
-### 请求耗时监控
+### Request Duration Monitoring
 
-所有 API 响应包含 `X-Response-Time` 响应头 (毫秒)。后端中间件自动记录:
+All API responses include the `X-Response-Time` response header (milliseconds). Backend middleware automatically logs:
 
-| 耗时 | 日志级别 | 标签 |
+| Duration | Log Level | Label |
 |------|---------|------|
 | > 100ms | INFO | `SLOWISH` |
 | > 500ms | WARNING | `SLOW` |
 
-### 日志配置
+### Logging Configuration
 
-当前日志输出到控制台 (`stdout`)，格式:
+Logs are currently output to the console (`stdout`), with the format:
 
 ```
 2026-06-05 10:30:15 INFO  SLOWISH /api/dashboard/overview/ 120ms
 ```
 
-生产环境建议添加文件日志:
+For production, file logging is recommended:
 
 ```python
 LOGGING = {
@@ -549,83 +549,83 @@ LOGGING = {
 }
 ```
 
-### 系统资源监控
+### System Resource Monitoring
 
-推荐使用 Prometheus + Grafana 进行系统级监控，关键指标:
+Prometheus + Grafana is recommended for system-level monitoring. Key metrics:
 
-| 指标 | 告警阈值 |
+| Metric | Alert Threshold |
 |------|---------|
-| API 响应时间 P99 | > 2000ms |
-| 数据库连接数 | > 80% 最大连接数 |
-| Redis 内存使用 | > 80% maxmemory |
-| 磁盘使用率 | > 85% |
-| CPU 使用率 | 持续 > 80% 超过 5 分钟 |
+| API response time P99 | > 2000ms |
+| Database connections | > 80% of max connections |
+| Redis memory usage | > 80% of maxmemory |
+| Disk usage | > 85% |
+| CPU usage | Sustained > 80% for over 5 minutes |
 
 ---
 
-## 数据备份与恢复
+## Data Backup & Recovery
 
-### SQLite 备份
+### SQLite Backup
 
-开发/测试环境使用 SQLite 时:
+When using SQLite in development/testing environments:
 
 ```bash
-# 安全在线备份 (WAL 模式下不锁表)
+# Safe online backup (does not lock tables in WAL mode)
 sqlite3 anchor_system/db.sqlite3 ".backup /backup/mcn_$(date +%Y%m%d).db"
 
-# 压缩归档
+# Compressed archive
 gzip /backup/mcn_$(date +%Y%m%d).db
 ```
 
-**自动备份脚本 (`backup.sh`):**
+**Automated Backup Script (`backup.sh`):**
 
 ```bash
 #!/bin/bash
 BACKUP_DIR="/backup/mcn"
 mkdir -p $BACKUP_DIR
 
-# 数据库备份
+# Database backup
 sqlite3 /opt/mcn/anchor_system/db.sqlite3 ".backup $BACKUP_DIR/mcn_$(date +%Y%m%d_%H%M%S).db"
 
-# 保留最近 30 天备份
+# Retain only the last 30 days of backups
 find $BACKUP_DIR -name "mcn_*.db" -mtime +30 -delete
 
 echo "[$(date)] Backup completed" >> $BACKUP_DIR/backup.log
 ```
 
-### PostgreSQL 备份
+### PostgreSQL Backup
 
 ```bash
-# 全库备份
+# Full database backup
 pg_dump -U mcn_user -Fc mcn_db > /backup/mcn_$(date +%Y%m%d).dump
 
-# 恢复
+# Restore
 pg_restore -U mcn_user -d mcn_db /backup/mcn_20260605.dump
 ```
 
-**自动备份 (crontab):**
+**Automated Backup (crontab):**
 
 ```bash
-# 每天凌晨 2 点备份
+# Daily backup at 2:00 AM
 0 2 * * * pg_dump -U mcn_user -Fc mcn_db | gzip > /backup/mcn_$(date +\%Y\%m\%d).dump.gz
 ```
 
-### 数据导出 (API)
+### Data Export (API)
 
-通过导出接口获取 CSV 格式数据:
+Export data in CSV format via the export endpoint:
 
 ```bash
-# 导出直播记录
+# Export live session records
 curl -X POST http://127.0.0.1:8000/api/exports/create_export/ \
   -H "Content-Type: application/json" \
   -d '{"export_type": "sessions", "params": {"start": "2026-01-01"}}'
 
-# 导出考勤记录
+# Export attendance records
 curl -X POST http://127.0.0.1:8000/api/exports/create_export/ \
   -H "Content-Type: application/json" \
   -d '{"export_type": "attendance", "params": {"start": "2026-01-01"}}'
 
-# 导出财务记录
+# Export finance records
 curl -X POST http://127.0.0.1:8000/api/exports/create_export/ \
   -H "Content-Type: application/json" \
   -d '{"export_type": "finance", "params": {"start": "2026-01-01"}}'
@@ -633,54 +633,54 @@ curl -X POST http://127.0.0.1:8000/api/exports/create_export/ \
 
 ---
 
-## 常见问题
+## FAQ
 
-### Q: SQLite 支持多少并发?
+### Q: How much concurrency does SQLite support?
 
-WAL 模式下支持多读单写，读并发可达数千级，写操作串行化。日活 1000 用户以下无需切换数据库。超过 100 写并发/秒建议迁移 PostgreSQL。
+In WAL mode, SQLite supports multiple concurrent readers with a single writer. Read concurrency can reach thousands; write operations are serialized. For fewer than 1000 daily active users, switching databases is unnecessary. If write concurrency exceeds 100/second, consider migrating to PostgreSQL.
 
-### Q: 如何从 SQLite 迁移到 PostgreSQL?
+### Q: How to migrate from SQLite to PostgreSQL?
 
-1. 安装依赖: `pip install psycopg2-binary`
-2. 创建 PostgreSQL 数据库和用户
-3. 修改 `settings.py` 中的 `DATABASES` 配置
-4. 执行迁移: `python manage.py migrate`
-5. 导入旧数据: 使用 `dumpdata` / `loaddata` 或第三方工具
+1. Install dependency: `pip install psycopg2-binary`
+2. Create PostgreSQL database and user
+3. Modify the `DATABASES` configuration in `settings.py`
+4. Run migrations: `python manage.py migrate`
+5. Import old data: use `dumpdata` / `loaddata` or third-party tools
 
 ```bash
-# 从 SQLite 导出
+# Export from SQLite
 python manage.py dumpdata --natural-foreign --natural-primary -e auth.Permission -e contenttypes > data.json
 
-# 切换到 PostgreSQL 后导入
+# Import after switching to PostgreSQL
 python manage.py loaddata data.json
 ```
 
-### Q: 如何启用 Redis 缓存?
+### Q: How to enable Redis caching?
 
-1. 安装: `pip install django-redis`
-2. 在 `settings.py` 中将 `CACHES` 配置切换为 Redis (已内置注释模板)
-3. 重启服务即可
+1. Install: `pip install django-redis`
+2. Switch the `CACHES` configuration in `settings.py` to Redis (commented template is included)
+3. Restart the service
 
-### Q: 前端构建后页面空白?
+### Q: Frontend page is blank after build?
 
-检查 Nginx 配置中 `try_files` 是否正确:
+Check that the Nginx configuration has the correct `try_files` directive:
 
 ```nginx
 location / {
     root /path/to/frontend/dist;
-    try_files $uri $uri/ /index.html;  # SPA 必须回退到 index.html
+    try_files $uri $uri/ /index.html;  # SPA must fall back to index.html
 }
 ```
 
-### Q: AI 接口响应较慢?
+### Q: AI endpoints respond slowly?
 
-AI 接口首次请求需要查询大量历史数据，后续请求会命中缓存 (120-180 秒 TTL)。如需进一步提升:
+AI endpoints require querying large amounts of historical data on the first request; subsequent requests will hit the cache (120-180 seconds TTL). For further improvement:
 
-- 启用 Redis 缓存
-- 增加 Gunicorn worker 数量
-- 对数据库查询字段添加索引
+- Enable Redis caching
+- Increase Gunicorn worker count
+- Add database indexes on query fields
 
-### Q: 如何重置数据库?
+### Q: How to reset the database?
 
 ```bash
 rm anchor_system/db.sqlite3
@@ -689,9 +689,9 @@ python manage.py createsuperuser
 python manage.py seed_data
 ```
 
-### Q: 如何查看慢请求?
+### Q: How to view slow requests?
 
-查看控制台日志或日志文件，搜索 `SLOWISH` / `SLOW` 关键字。所有响应头中的 `X-Response-Time` 字段也可用于 Nginx 日志记录:
+Check the console log or log file, and search for `SLOWISH` / `SLOW` keywords. The `X-Response-Time` field in all response headers can also be used for Nginx log recording:
 
 ```nginx
 log_format timed '$remote_addr - $request_time - $upstream_response_time - $request';
