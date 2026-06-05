@@ -39,6 +39,28 @@ from .views_extra4 import (
     SettlementViewSet, LogisticsViewSet, InventoryViewSet,
     ReturnAnalysisViewSet, TaxRecordViewSet,
 )
+from .views_extra5 import (
+    StreamChecklistViewSet, StreamReplayViewSet, StreamBackupViewSet,
+    StreamQualityViewSet, LiveTimelineViewSet, ProductLinkViewSet,
+    StreamTemplateViewSet, StreamOverlayViewSet,
+    OrderViewSet, RefundViewSet, PriceMonitorViewSet,
+    CommissionConfigViewSet, ProductTagViewSet,
+    ProductReviewViewSet, SalesTargetViewSet, PromoCodeViewSet,
+    ContentCalendarViewSet, InfluencerCollabViewSet, SocialMediaViewSet,
+    EmailCampaignViewSet, ReferralProgramViewSet, LoyaltyProgramViewSet,
+    EventManagementViewSet, SEOOptimizationViewSet, LivePollViewSet,
+)
+from .views_extra6 import (
+    RealtimeAnalyticsViewSet, AudienceInsightViewSet, ConversionFunnelViewSet,
+    ROIAnalysisViewSet, BenchmarkReportViewSet, CustomDashboardViewSet,
+    DataImportViewSet,
+    SalaryManagementViewSet, RecruitmentViewSet, OnboardingViewSet,
+    LeaveBalanceViewSet, TeamCommunicationViewSet, OKRManagementViewSet,
+    BudgetManagementViewSet, ProfitAnalysisViewSet, InvoiceManagementViewSet,
+    PaymentRecordViewSet, InsuranceRecordViewSet, LegalCaseViewSet,
+    QualityCheckViewSet, WorkflowAutomationViewSet, VendorRatingViewSet,
+    StockAlertViewSet, SLAManagementViewSet, FeedbackSystemViewSet,
+)
 
 router = DefaultRouter()
 # 原有
@@ -129,6 +151,57 @@ router.register(r'logistics', LogisticsViewSet)
 router.register(r'inventories', InventoryViewSet)
 router.register(r'return-analysis', ReturnAnalysisViewSet)
 router.register(r'tax-records', TaxRecordViewSet)
+# 第五轮 50 新功能
+router.register(r'stream-checklists', StreamChecklistViewSet)
+router.register(r'stream-replays', StreamReplayViewSet)
+router.register(r'stream-backups', StreamBackupViewSet)
+router.register(r'stream-quality', StreamQualityViewSet)
+router.register(r'live-timelines', LiveTimelineViewSet)
+router.register(r'product-links', ProductLinkViewSet)
+router.register(r'stream-templates', StreamTemplateViewSet)
+router.register(r'stream-overlays', StreamOverlayViewSet)
+router.register(r'live-polls', LivePollViewSet)
+router.register(r'orders', OrderViewSet)
+router.register(r'refunds', RefundViewSet)
+router.register(r'price-monitors', PriceMonitorViewSet)
+router.register(r'commission-configs', CommissionConfigViewSet)
+router.register(r'product-tags', ProductTagViewSet)
+router.register(r'product-reviews', ProductReviewViewSet)
+router.register(r'sales-targets', SalesTargetViewSet)
+router.register(r'promo-codes', PromoCodeViewSet)
+router.register(r'content-calendars', ContentCalendarViewSet)
+router.register(r'influencer-collabs', InfluencerCollabViewSet)
+router.register(r'social-medias', SocialMediaViewSet)
+router.register(r'email-campaigns', EmailCampaignViewSet)
+router.register(r'referral-programs', ReferralProgramViewSet)
+router.register(r'loyalty-programs', LoyaltyProgramViewSet)
+router.register(r'events', EventManagementViewSet)
+router.register(r'seo-optimizations', SEOOptimizationViewSet)
+router.register(r'realtime-analytics', RealtimeAnalyticsViewSet)
+router.register(r'audience-insights', AudienceInsightViewSet)
+router.register(r'conversion-funnels', ConversionFunnelViewSet)
+router.register(r'roi-analysis', ROIAnalysisViewSet)
+router.register(r'benchmark-reports', BenchmarkReportViewSet)
+router.register(r'custom-dashboards', CustomDashboardViewSet)
+router.register(r'data-imports', DataImportViewSet)
+router.register(r'salary', SalaryManagementViewSet)
+router.register(r'recruitments', RecruitmentViewSet)
+router.register(r'onboardings', OnboardingViewSet)
+router.register(r'leave-balances', LeaveBalanceViewSet)
+router.register(r'team-communications', TeamCommunicationViewSet)
+router.register(r'okr', OKRManagementViewSet)
+router.register(r'budgets', BudgetManagementViewSet)
+router.register(r'profits', ProfitAnalysisViewSet)
+router.register(r'invoices', InvoiceManagementViewSet)
+router.register(r'payments', PaymentRecordViewSet)
+router.register(r'insurances', InsuranceRecordViewSet)
+router.register(r'legal-cases', LegalCaseViewSet)
+router.register(r'quality-checks', QualityCheckViewSet)
+router.register(r'workflows', WorkflowAutomationViewSet)
+router.register(r'vendor-ratings', VendorRatingViewSet)
+router.register(r'stock-alerts', StockAlertViewSet)
+router.register(r'sla', SLAManagementViewSet)
+router.register(r'feedbacks', FeedbackSystemViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

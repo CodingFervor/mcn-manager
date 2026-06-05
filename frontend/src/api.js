@@ -558,3 +558,69 @@ export const TaxRecordAPI = {
   stats: () => api.get('/tax-records/stats/'),
   byPeriod: (period) => api.get('/tax-records/by_period/', { params: { period } }),
 }
+
+// ===== 第五轮 50 新功能 API =====
+
+// 直播运营
+export const StreamChecklistAPI = { list: (p) => wrap(api.get('/stream-checklists/', { params: p })), create: (d) => api.post('/stream-checklists/', d), update: (id, d) => api.put(`/stream-checklists/${id}/`, d), stats: () => api.get('/stream-checklists/stats/') }
+export const StreamReplayAPI = { list: (p) => wrap(api.get('/stream-replays/', { params: p })), create: (d) => api.post('/stream-replays/', d), update: (id, d) => api.put(`/stream-replays/${id}/`, d), remove: (id) => api.delete(`/stream-replays/${id}/`), stats: () => api.get('/stream-replays/stats/') }
+export const StreamBackupAPI = { list: (p) => wrap(api.get('/stream-backups/', { params: p })), create: (d) => api.post('/stream-backups/', d), update: (id, d) => api.put(`/stream-backups/${id}/`, d), stats: () => api.get('/stream-backups/stats/') }
+export const StreamQualityAPI = { list: (p) => wrap(api.get('/stream-quality/', { params: p })), create: (d) => api.post('/stream-quality/', d), stats: () => api.get('/stream-quality/stats/') }
+export const LiveTimelineAPI = { list: (p) => wrap(api.get('/live-timelines/', { params: p })), create: (d) => api.post('/live-timelines/', d), stats: () => api.get('/live-timelines/stats/') }
+export const ProductLinkAPI = { list: (p) => wrap(api.get('/product-links/', { params: p })), create: (d) => api.post('/product-links/', d), update: (id, d) => api.put(`/product-links/${id}/`, d), remove: (id) => api.delete(`/product-links/${id}/`), stats: () => api.get('/product-links/stats/') }
+export const StreamTemplateAPI = { list: (p) => wrap(api.get('/stream-templates/', { params: p })), create: (d) => api.post('/stream-templates/', d), update: (id, d) => api.put(`/stream-templates/${id}/`, d), remove: (id) => api.delete(`/stream-templates/${id}/`), stats: () => api.get('/stream-templates/stats/') }
+export const StreamOverlayAPI = { list: (p) => wrap(api.get('/stream-overlays/', { params: p })), create: (d) => api.post('/stream-overlays/', d), update: (id, d) => api.put(`/stream-overlays/${id}/`, d), stats: () => api.get('/stream-overlays/stats/') }
+export const LivePollAPI = { list: (p) => wrap(api.get('/live-polls/', { params: p })), create: (d) => api.post('/live-polls/', d), update: (id, d) => api.put(`/live-polls/${id}/`, d), stats: () => api.get('/live-polls/stats/') }
+
+// 电商销售
+export const OrderAPI = { list: (p) => wrap(api.get('/orders/', { params: p })), create: (d) => api.post('/orders/', d), update: (id, d) => api.put(`/orders/${id}/`, d), remove: (id) => api.delete(`/orders/${id}/`), stats: () => api.get('/orders/stats/') }
+export const RefundAPI = { list: (p) => wrap(api.get('/refunds/', { params: p })), create: (d) => api.post('/refunds/', d), update: (id, d) => api.put(`/refunds/${id}/`, d), stats: () => api.get('/refunds/stats/') }
+export const PriceMonitorAPI = { list: (p) => wrap(api.get('/price-monitors/', { params: p })), create: (d) => api.post('/price-monitors/', d), update: (id, d) => api.put(`/price-monitors/${id}/`, d), stats: () => api.get('/price-monitors/stats/') }
+export const CommissionConfigAPI = { list: (p) => wrap(api.get('/commission-configs/', { params: p })), create: (d) => api.post('/commission-configs/', d), update: (id, d) => api.put(`/commission-configs/${id}/`, d), remove: (id) => api.delete(`/commission-configs/${id}/`), stats: () => api.get('/commission-configs/stats/') }
+export const ProductTagAPI = { list: (p) => wrap(api.get('/product-tags/', { params: p })), create: (d) => api.post('/product-tags/', d), update: (id, d) => api.put(`/product-tags/${id}/`, d), remove: (id) => api.delete(`/product-tags/${id}/`), stats: () => api.get('/product-tags/stats/') }
+export const ProductReviewAPI = { list: (p) => wrap(api.get('/product-reviews/', { params: p })), create: (d) => api.post('/product-reviews/', d), update: (id, d) => api.put(`/product-reviews/${id}/`, d), stats: () => api.get('/product-reviews/stats/') }
+export const SalesTargetAPI = { list: (p) => wrap(api.get('/sales-targets/', { params: p })), create: (d) => api.post('/sales-targets/', d), update: (id, d) => api.put(`/sales-targets/${id}/`, d), stats: () => api.get('/sales-targets/stats/') }
+export const PromoCodeAPI = { list: (p) => wrap(api.get('/promo-codes/', { params: p })), create: (d) => api.post('/promo-codes/', d), update: (id, d) => api.put(`/promo-codes/${id}/`, d), remove: (id) => api.delete(`/promo-codes/${id}/`), stats: () => api.get('/promo-codes/stats/') }
+
+// 营销推广
+export const ContentCalendarAPI = { list: (p) => wrap(api.get('/content-calendars/', { params: p })), create: (d) => api.post('/content-calendars/', d), update: (id, d) => api.put(`/content-calendars/${id}/`, d), remove: (id) => api.delete(`/content-calendars/${id}/`), stats: () => api.get('/content-calendars/stats/') }
+export const InfluencerCollabAPI = { list: (p) => wrap(api.get('/influencer-collabs/', { params: p })), create: (d) => api.post('/influencer-collabs/', d), update: (id, d) => api.put(`/influencer-collabs/${id}/`, d), remove: (id) => api.delete(`/influencer-collabs/${id}/`), stats: () => api.get('/influencer-collabs/stats/') }
+export const SocialMediaAPI = { list: (p) => wrap(api.get('/social-medias/', { params: p })), create: (d) => api.post('/social-medias/', d), update: (id, d) => api.put(`/social-medias/${id}/`, d), remove: (id) => api.delete(`/social-medias/${id}/`), stats: () => api.get('/social-medias/stats/') }
+export const EmailCampaignAPI = { list: (p) => wrap(api.get('/email-campaigns/', { params: p })), create: (d) => api.post('/email-campaigns/', d), update: (id, d) => api.put(`/email-campaigns/${id}/`, d), stats: () => api.get('/email-campaigns/stats/') }
+export const ReferralProgramAPI = { list: (p) => wrap(api.get('/referral-programs/', { params: p })), create: (d) => api.post('/referral-programs/', d), update: (id, d) => api.put(`/referral-programs/${id}/`, d), stats: () => api.get('/referral-programs/stats/') }
+export const LoyaltyProgramAPI = { list: (p) => wrap(api.get('/loyalty-programs/', { params: p })), create: (d) => api.post('/loyalty-programs/', d), update: (id, d) => api.put(`/loyalty-programs/${id}/`, d), stats: () => api.get('/loyalty-programs/stats/') }
+export const EventAPI = { list: (p) => wrap(api.get('/events/', { params: p })), create: (d) => api.post('/events/', d), update: (id, d) => api.put(`/events/${id}/`, d), remove: (id) => api.delete(`/events/${id}/`), stats: () => api.get('/events/stats/') }
+export const SEOAPI = { list: (p) => wrap(api.get('/seo-optimizations/', { params: p })), create: (d) => api.post('/seo-optimizations/', d), update: (id, d) => api.put(`/seo-optimizations/${id}/`, d), remove: (id) => api.delete(`/seo-optimizations/${id}/`), stats: () => api.get('/seo-optimizations/stats/') }
+
+// 数据分析
+export const RealtimeAnalyticsAPI = { list: (p) => wrap(api.get('/realtime-analytics/', { params: p })), create: (d) => api.post('/realtime-analytics/', d), stats: () => api.get('/realtime-analytics/stats/') }
+export const AudienceInsightAPI = { list: (p) => wrap(api.get('/audience-insights/', { params: p })), create: (d) => api.post('/audience-insights/', d), update: (id, d) => api.put(`/audience-insights/${id}/`, d), stats: () => api.get('/audience-insights/stats/') }
+export const ConversionFunnelAPI = { list: (p) => wrap(api.get('/conversion-funnels/', { params: p })), create: (d) => api.post('/conversion-funnels/', d), update: (id, d) => api.put(`/conversion-funnels/${id}/`, d), stats: () => api.get('/conversion-funnels/stats/') }
+export const ROIAnalysisAPI = { list: (p) => wrap(api.get('/roi-analysis/', { params: p })), create: (d) => api.post('/roi-analysis/', d), update: (id, d) => api.put(`/roi-analysis/${id}/`, d), stats: () => api.get('/roi-analysis/stats/') }
+export const BenchmarkReportAPI = { list: (p) => wrap(api.get('/benchmark-reports/', { params: p })), create: (d) => api.post('/benchmark-reports/', d), stats: () => api.get('/benchmark-reports/stats/') }
+export const CustomDashboardAPI = { list: (p) => wrap(api.get('/custom-dashboards/', { params: p })), create: (d) => api.post('/custom-dashboards/', d), update: (id, d) => api.put(`/custom-dashboards/${id}/`, d), remove: (id) => api.delete(`/custom-dashboards/${id}/`), stats: () => api.get('/custom-dashboards/stats/') }
+export const DataImportAPI = { list: (p) => wrap(api.get('/data-imports/', { params: p })), create: (d) => api.post('/data-imports/', d), stats: () => api.get('/data-imports/stats/') }
+
+// 团队管理
+export const SalaryAPI = { list: (p) => wrap(api.get('/salary/', { params: p })), create: (d) => api.post('/salary/', d), update: (id, d) => api.put(`/salary/${id}/`, d), stats: () => api.get('/salary/stats/') }
+export const RecruitmentAPI = { list: (p) => wrap(api.get('/recruitments/', { params: p })), create: (d) => api.post('/recruitments/', d), update: (id, d) => api.put(`/recruitments/${id}/`, d), remove: (id) => api.delete(`/recruitments/${id}/`), stats: () => api.get('/recruitments/stats/') }
+export const OnboardingAPI = { list: (p) => wrap(api.get('/onboardings/', { params: p })), create: (d) => api.post('/onboardings/', d), update: (id, d) => api.put(`/onboardings/${id}/`, d), stats: () => api.get('/onboardings/stats/') }
+export const LeaveBalanceAPI = { list: (p) => wrap(api.get('/leave-balances/', { params: p })), create: (d) => api.post('/leave-balances/', d), update: (id, d) => api.put(`/leave-balances/${id}/`, d), stats: () => api.get('/leave-balances/stats/') }
+export const TeamChatAPI = { list: (p) => wrap(api.get('/team-communications/', { params: p })), create: (d) => api.post('/team-communications/', d), update: (id, d) => api.put(`/team-communications/${id}/`, d), stats: () => api.get('/team-communications/stats/') }
+export const OKRAPI = { list: (p) => wrap(api.get('/okr/', { params: p })), create: (d) => api.post('/okr/', d), update: (id, d) => api.put(`/okr/${id}/`, d), stats: () => api.get('/okr/stats/') }
+
+// 财务法务
+export const BudgetAPI = { list: (p) => wrap(api.get('/budgets/', { params: p })), create: (d) => api.post('/budgets/', d), update: (id, d) => api.put(`/budgets/${id}/`, d), stats: () => api.get('/budgets/stats/') }
+export const ProfitAPI = { list: (p) => wrap(api.get('/profits/', { params: p })), create: (d) => api.post('/profits/', d), update: (id, d) => api.put(`/profits/${id}/`, d), stats: () => api.get('/profits/stats/') }
+export const InvoiceAPI = { list: (p) => wrap(api.get('/invoices/', { params: p })), create: (d) => api.post('/invoices/', d), update: (id, d) => api.put(`/invoices/${id}/`, d), remove: (id) => api.delete(`/invoices/${id}/`), stats: () => api.get('/invoices/stats/') }
+export const PaymentAPI = { list: (p) => wrap(api.get('/payments/', { params: p })), create: (d) => api.post('/payments/', d), update: (id, d) => api.put(`/payments/${id}/`, d), stats: () => api.get('/payments/stats/') }
+export const InsuranceAPI = { list: (p) => wrap(api.get('/insurances/', { params: p })), create: (d) => api.post('/insurances/', d), update: (id, d) => api.put(`/insurances/${id}/`, d), remove: (id) => api.delete(`/insurances/${id}/`), stats: () => api.get('/insurances/stats/') }
+export const LegalCaseAPI = { list: (p) => wrap(api.get('/legal-cases/', { params: p })), create: (d) => api.post('/legal-cases/', d), update: (id, d) => api.put(`/legal-cases/${id}/`, d), stats: () => api.get('/legal-cases/stats/') }
+
+// 运营质控
+export const QualityCheckAPI = { list: (p) => wrap(api.get('/quality-checks/', { params: p })), create: (d) => api.post('/quality-checks/', d), update: (id, d) => api.put(`/quality-checks/${id}/`, d), stats: () => api.get('/quality-checks/stats/') }
+export const WorkflowAPI = { list: (p) => wrap(api.get('/workflows/', { params: p })), create: (d) => api.post('/workflows/', d), update: (id, d) => api.put(`/workflows/${id}/`, d), remove: (id) => api.delete(`/workflows/${id}/`), stats: () => api.get('/workflows/stats/') }
+export const VendorRatingAPI = { list: (p) => wrap(api.get('/vendor-ratings/', { params: p })), create: (d) => api.post('/vendor-ratings/', d), update: (id, d) => api.put(`/vendor-ratings/${id}/`, d), stats: () => api.get('/vendor-ratings/stats/') }
+export const StockAlertAPI = { list: (p) => wrap(api.get('/stock-alerts/', { params: p })), create: (d) => api.post('/stock-alerts/', d), update: (id, d) => api.put(`/stock-alerts/${id}/`, d), stats: () => api.get('/stock-alerts/stats/') }
+export const SLAAPI = { list: (p) => wrap(api.get('/sla/', { params: p })), create: (d) => api.post('/sla/', d), update: (id, d) => api.put(`/sla/${id}/`, d), stats: () => api.get('/sla/stats/') }
+export const FeedbackAPI = { list: (p) => wrap(api.get('/feedbacks/', { params: p })), create: (d) => api.post('/feedbacks/', d), update: (id, d) => api.put(`/feedbacks/${id}/`, d), stats: () => api.get('/feedbacks/stats/') }
