@@ -47,5 +47,9 @@ staticfiles/
 *.key
 settings.local.py
 
+# Capacitor
+frontend/android/
+frontend/ios/
+
 # Claude Code
 .zcode/

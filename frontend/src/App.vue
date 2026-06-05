@@ -12,14 +12,17 @@ import {
   ChatRound, PriceTag, Timer, Brush, Collection,
   Files, Coordinate, House, Stamp, Key,
   View, TrendCharts, Avatar, Aim, AlarmClock,
-  List, Van, Grid, RefreshLeft, WalletFilled
+  List, Van, Grid, RefreshLeft, WalletFilled, Fold
 } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const route = useRoute()
 
+const isMobile = ref(false)
+const drawerVisible = ref(false)
 const active = computed(() => route.path.slice(1) || 'dashboard')
 const currentTime = ref('')
+
 const menuItems = [
   { index: 'dashboard', label: '数据驾驶舱', icon: DataLine, badge: 'HOT' },
   { index: 'billboard', label: '实时大屏', icon: Monitor },
@@ -61,7 +64,6 @@ const menuItems = [
   { index: 'revenue-sharing', label: 'MCN分成', icon: Histogram },
   { index: 'brand-projects', label: '品牌合作', icon: OfficeBuilding },
   { index: 'scenes', label: '直播场景', icon: Picture },
-  // 第四轮 20个新功能
   { index: 'live-interactions', label: '直播间互动', icon: ChatRound },
   { index: 'coupons', label: '优惠券管理', icon: PriceTag },
   { index: 'flash-sales', label: '秒杀活动', icon: Timer },
@@ -84,9 +86,21 @@ const menuItems = [
   { index: 'tax-records', label: '税务管理', icon: WalletFilled },
 ]
 
-const navigate = (key) => router.push(`/${key}`)
+const navigate = (key) => {
+  router.push(`/${key}`)
+  if (isMobile.value) drawerVisible.value = false
+}
+
+const bottomNavItems = [
+  { index: 'dashboard', label: '首页', icon: DataLine },
+  { index: 'sessions', label: '直播', icon: VideoCamera },
+  { index: 'tasks', label: '任务', icon: Notebook },
+  { index: 'notifications', label: '消息', icon: Bell },
+  { index: 'more', label: '更多', icon: Grid },
+]
 
 let timer = null
+let mql = null
 const updateTime = () => {
   const d = new Date()
   currentTime.value = d.toLocaleString('zh-CN', {
@@ -94,59 +108,95 @@ const updateTime = () => {
     hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
   })
 }
+const onResize = (e) => { isMobile.value = e.matches }
+
 onMounted(() => {
   updateTime()
   timer = setInterval(updateTime, 3000)
+  mql = window.matchMedia('(max-width: 768px)')
+  isMobile.value = mql.matches
+  mql.addEventListener('change', onResize)
 })
-onUnmounted(() => { if (timer) clearInterval(timer) })
+onUnmounted(() => {
+  if (timer) clearInterval(timer)
+  if (mql) mql.removeEventListener('change', onResize)
+})
 </script>
 
 <template>
   <el-container style="height: 100vh">
-    <el-aside width="240px" style="background: linear-gradient(180deg, #0d1230 0%, #1a1f4a 100%); position: relative; z-index: 10; display: flex; flex-direction: column; overflow: hidden">
+    <!-- Desktop Sidebar -->
+    <el-aside v-if="!isMobile" width="240px" style="background: linear-gradient(180deg, #0d1230 0%, #1a1f4a 100%); position: relative; z-index: 10; display: flex; flex-direction: column; overflow: hidden">
       <div style="padding: 28px 20px 24px; text-align: center; border-bottom: 1px solid var(--border-glow); position: relative;">
         <div style="font-size: 36px; margin-bottom: 4px; filter: drop-shadow(0 0 12px rgba(124, 92, 255, 0.6))">🎬</div>
         <div class="glow-text" style="font-size: 18px; font-weight: 800; letter-spacing: 1px">MCN 管家</div>
         <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px; letter-spacing: 2px">LIVE STREAMING OPS</div>
       </div>
-
-      <el-menu
-        :default-active="active"
-        @select="navigate"
-        style="padding: 12px 0; overflow-y: auto; flex: 1"
-      >
+      <el-menu :default-active="active" @select="navigate" style="padding: 12px 0; overflow-y: auto; flex: 1">
         <el-menu-item v-for="m in menuItems" :key="m.index" :index="m.index">
           <el-icon style="font-size: 18px"><component :is="m.icon" /></el-icon>
           <span style="margin-left: 4px; font-weight: 500">{{ m.label }}</span>
           <el-tag v-if="m.badge" size="small" style="margin-left: auto; background: var(--grad-4); border: none; color: white; height: 18px; line-height: 18px; padding: 0 6px; font-size: 10px">{{ m.badge }}</el-tag>
         </el-menu-item>
       </el-menu>
-
     </el-aside>
 
+    <!-- Mobile Drawer -->
+    <el-drawer v-model="drawerVisible" direction="ltr" :size="280" :with-header="false" :z-index="2000">
+      <div style="background: linear-gradient(180deg, #0d1230 0%, #1a1f4a 100%); height: 100%; display: flex; flex-direction: column">
+        <div style="padding: 28px 20px 24px; text-align: center; border-bottom: 1px solid var(--border-glow)">
+          <div style="font-size: 36px; margin-bottom: 4px; filter: drop-shadow(0 0 12px rgba(124, 92, 255, 0.6))">🎬</div>
+          <div class="glow-text" style="font-size: 18px; font-weight: 800; letter-spacing: 1px">MCN 管家</div>
+          <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px; letter-spacing: 2px">LIVE STREAMING OPS</div>
+        </div>
+        <el-menu :default-active="active" @select="navigate" style="padding: 12px 0; overflow-y: auto; flex: 1">
+          <el-menu-item v-for="m in menuItems" :key="m.index" :index="m.index">
+            <el-icon style="font-size: 18px"><component :is="m.icon" /></el-icon>
+            <span style="margin-left: 4px; font-weight: 500">{{ m.label }}</span>
+            <el-tag v-if="m.badge" size="small" style="margin-left: auto; background: var(--grad-4); border: none; color: white; height: 18px; line-height: 18px; padding: 0 6px; font-size: 10px">{{ m.badge }}</el-tag>
+          </el-menu-item>
+        </el-menu>
+      </div>
+    </el-drawer>
+
     <el-container>
-      <el-header style="background: rgba(13, 18, 48, 0.8); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border-glow); display: flex; align-items: center; padding: 0 24px; height: 64px; position: relative; z-index: 9">
+      <!-- Header -->
+      <el-header style="background: rgba(13, 18, 48, 0.8); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border-glow); display: flex; align-items: center; padding: 0 16px; height: 56px; position: relative; z-index: 9">
+        <!-- Hamburger (mobile) -->
+        <el-icon v-if="isMobile" @click="drawerVisible = true" style="font-size: 24px; color: var(--neon-cyan); cursor: pointer; margin-right: 12px">
+          <Fold />
+        </el-icon>
+
         <div style="flex: 1; display: flex; align-items: center; gap: 16px">
-          <div style="padding: 8px 16px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-glow); border-radius: 12px; display: flex; align-items: center; gap: 8px; min-width: 280px">
+          <!-- Mobile: show app name -->
+          <span v-if="isMobile" class="glow-text" style="font-size: 16px; font-weight: 800">MCN 管家</span>
+          <!-- Desktop: search bar -->
+          <div v-else style="padding: 8px 16px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-glow); border-radius: 12px; display: flex; align-items: center; gap: 8px; min-width: 280px">
             <el-icon style="color: var(--neon-cyan)"><Search /></el-icon>
             <span style="color: var(--text-muted); font-size: 13px">搜索主播、店铺、直播间...</span>
             <span style="margin-left: auto; padding: 2px 6px; background: rgba(0, 229, 255, 0.2); border-radius: 4px; font-size: 10px; color: var(--neon-cyan)">⌘K</span>
           </div>
         </div>
-        <div style="display: flex; align-items: center; gap: 16px">
-          <div style="display: flex; align-items: center; gap: 6px; padding: 6px 12px; background: rgba(0, 255, 157, 0.1); border: 1px solid rgba(0, 255, 157, 0.3); border-radius: 20px">
+
+        <div style="display: flex; align-items: center; gap: 12px">
+          <!-- Status indicator -->
+          <div class="mobile-hidden" style="display: flex; align-items: center; gap: 6px; padding: 6px 12px; background: rgba(0, 255, 157, 0.1); border: 1px solid rgba(0, 255, 157, 0.3); border-radius: 20px">
             <span class="live-dot"></span>
             <span style="font-size: 12px; color: var(--neon-green); font-weight: 600">系统正常</span>
           </div>
-          <div style="font-size: 13px; color: var(--text-secondary); font-family: 'Courier New', monospace">{{ currentTime }}</div>
+          <!-- Clock (desktop only) -->
+          <div class="mobile-hidden" style="font-size: 13px; color: var(--text-secondary); font-family: 'Courier New', monospace">{{ currentTime }}</div>
+          <!-- Notification -->
           <el-icon style="font-size: 20px; color: var(--text-secondary); cursor: pointer; padding: 8px; border-radius: 8px; background: rgba(255, 255, 255, 0.05)">
             <Bell />
           </el-icon>
-          <div style="width: 36px; height: 36px; border-radius: 50%; background: var(--grad-1); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(124, 92, 255, 0.4)">A</div>
+          <!-- Avatar -->
+          <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--grad-1); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; cursor: pointer; font-size: 13px; box-shadow: 0 4px 12px rgba(124, 92, 255, 0.4)">A</div>
         </div>
       </el-header>
 
-      <el-main style="padding: 0; height: calc(100vh - 64px); overflow: hidden">
+      <!-- Main content -->
+      <el-main style="padding: 0; height: calc(100vh - 56px); overflow: hidden">
         <router-view v-slot="{ Component }">
           <transition name="fade" mode="out-in">
             <component :is="Component" />
@@ -154,6 +204,17 @@ onUnmounted(() => { if (timer) clearInterval(timer) })
         </router-view>
       </el-main>
     </el-container>
+
+    <!-- Bottom Navigation (mobile only) -->
+    <div class="mobile-nav">
+      <button v-for="item in bottomNavItems" :key="item.index"
+        class="mobile-nav-item"
+        :class="{ active: item.index !== 'more' && active === item.index }"
+        @click="item.index === 'more' ? (drawerVisible = true) : navigate(item.index)">
+        <el-icon><component :is="item.icon" /></el-icon>
+        <span>{{ item.label }}</span>
+      </button>
+    </div>
   </el-container>
 </template>
 
