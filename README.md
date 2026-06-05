@@ -13,11 +13,33 @@
 [![Vue](https://img.shields.io/badge/Vue-3.5-4FC08D?logo=vue.js&logoColor=white)](https://vuejs.org)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-[Features](#-features) · [Quick Start](#-quick-start) · [Architecture](#-architecture) · [API Docs](docs/api.md) · [Deployment](docs/deployment.md) · [Contributing](CONTRIBUTING.md)
+[Screenshots](#-screenshots) · [Features](#-features) · [Quick Start](#-quick-start) · [Architecture](#-architecture) · [API Docs](docs/api.md) · [Deployment](docs/deployment.md) · [Contributing](CONTRIBUTING.md)
 
 ---
 
 </div>
+
+## 📸 Screenshots
+
+### Desktop
+
+| Dashboard | AI Center | Smart Scheduling | Store Management |
+|-----------|-----------|-------------------|------------------|
+| ![Dashboard](docs/screenshots/dashboard.png) | ![AI Center](docs/screenshots/ai.png) | ![Scheduling](docs/screenshots/schedules.png) | ![Stores](docs/screenshots/stores.png) |
+
+| Employee Management | Live Sessions | Finance Center | Performance Review |
+|---------------------|---------------|----------------|--------------------|
+| ![Employees](docs/screenshots/employees.png) | ![Sessions](docs/screenshots/sessions.png) | ![Finance](docs/screenshots/finance.png) | ![Reviews](docs/screenshots/reviews.png) |
+
+### Mobile Responsive
+
+| Dashboard (Mobile) | Employees (Mobile) | Scheduling (Mobile) |
+|---------------------|--------------------|---------------------|
+| ![Dashboard Mobile](docs/screenshots/dashboard-mobile.png) | ![Employees Mobile](docs/screenshots/employees-mobile.png) | ![Schedules Mobile](docs/screenshots/schedules-mobile.png) |
+
+> 📋 See all **60 pages** with screenshots: [Full Screenshot Gallery](docs/screenshots.md)
+
+---
 
 ## ✨ Features
 
@@ -217,6 +239,7 @@ mcn-manager/
 
 | Document | Description |
 |----------|-------------|
+| [Screenshots](docs/screenshots.md) | All 60 pages with desktop + mobile screenshots |
 | [Architecture](docs/architecture.md) | Layered architecture, tech stack, project structure |
 | [Quick Start](#-quick-start) | Installation, configuration, launch |
 | [API Reference](docs/api.md) | 90+ endpoints full reference |
