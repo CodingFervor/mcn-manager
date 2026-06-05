@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+*.so
+venv/
+env/
+.env
+*.sqlite3
+db.sqlite3
+
+# Node
+node_modules/
+frontend/dist/
+frontend/node_modules/
+.npm
+.eslintcache
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Django
+*.log
+media/
+staticfiles/
+
+# Build
+*.whl
+*.tar.gz
+
+# Secrets
+*.pem
+*.key
+settings.local.py
+
+# Claude Code
+.zcode/

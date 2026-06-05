@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "@vueuse/core": "^14.3.0",
+    "dayjs": "^1.11.21",
+    "echarts": "^6.1.0",
+    "nprogress": "^0.2.0",
+    "pinia": "^3.0.4",
+    "registry.npmjs.org": "^1.0.1",
+    "vue-echarts": "^8.0.1",
+    "vue-router": "^5.1.0"
+  }
+}
