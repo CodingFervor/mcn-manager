@@ -1,0 +1,31 @@
+{
+  "name": "MCN管家",
+  "appid": "__UNI__MCNMANAGER",
+  "description": "MCN直播运营管理小程序",
+  "versionName": "1.0.0",
+  "versionCode": "100",
+  "transformPx": false,
+  "mp-weixin": {
+    "appid": "",
+    "setting": {
+      "urlCheck": false,
+      "es6": true,
+      "minified": true
+    },
+    "usingComponents": true,
+    "optimization": {
+      "subPackages": true
+    },
+    "lazyCodeLoading": "requiredComponents"
+  },
+  "h5": {
+    "devServer": {
+      "proxy": {
+        "/api": {
+          "target": "http://localhost:8000",
+          "changeOrigin": true
+        }
+      }
+    }
+  }
+}

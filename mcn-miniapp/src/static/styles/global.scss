@@ -1,0 +1,123 @@
+@import './variables.scss';
+
+page {
+  background-color: $bg-primary;
+}
+
+.container {
+  padding: 24rpx;
+}
+
+.glass {
+  background: $bg-card;
+  backdrop-filter: blur(24rpx);
+  border: 2rpx solid $border-glow;
+  border-radius: $radius-md;
+}
+
+.glass-strong {
+  background: rgba(20, 24, 56, 0.85);
+  backdrop-filter: blur(40rpx);
+  border: 2rpx solid rgba(124, 92, 255, 0.35);
+  border-radius: $radius-md;
+}
+
+.neon-text {
+  color: $neon-purple;
+  text-shadow: 0 0 20rpx rgba(124, 92, 255, 0.5);
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: $text-primary;
+  margin-bottom: 20rpx;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.text-secondary { color: $text-secondary; }
+.text-muted { color: $text-muted; }
+.text-purple { color: $neon-purple; }
+.text-pink { color: $neon-pink; }
+.text-cyan { color: $neon-cyan; }
+.text-green { color: $neon-green; }
+.text-yellow { color: $neon-yellow; }
+.text-orange { color: $neon-orange; }
+
+.mt-20 { margin-top: 20rpx; }
+.mt-30 { margin-top: 30rpx; }
+.mb-20 { margin-bottom: 20rpx; }
+.mb-30 { margin-bottom: 30rpx; }
+.p-24 { padding: 24rpx; }
+.p-30 { padding: 30rpx; }
+
+.btn-primary {
+  background: linear-gradient(135deg, $neon-purple, $neon-pink);
+  color: #fff;
+  border: none;
+  border-radius: $radius-md;
+  padding: 24rpx 48rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+  text-align: center;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: $neon-purple;
+  border: 2rpx solid $neon-purple;
+  border-radius: $radius-md;
+  padding: 20rpx 40rpx;
+  font-size: 28rpx;
+  text-align: center;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80rpx 40rpx;
+}
+
+.empty-state .empty-icon {
+  font-size: 80rpx;
+  color: $text-muted;
+  margin-bottom: 20rpx;
+}
+
+.empty-state .empty-text {
+  color: $text-muted;
+  font-size: 28rpx;
+}
+
+.status-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4rpx 16rpx;
+  border-radius: 8rpx;
+  font-size: 22rpx;
+  font-weight: 500;
+}
+
+.status-active { background: rgba(0, 255, 157, 0.15); color: $neon-green; }
+.status-pending { background: rgba(255, 210, 63, 0.15); color: $neon-yellow; }
+.status-inactive { background: rgba(107, 115, 147, 0.15); color: $text-muted; }
+.status-danger { background: rgba(255, 77, 158, 0.15); color: $neon-pink; }

@@ -421,3 +421,4 @@ from .models_extra3 import *  # noqa: F401,F403
 from .models_extra4 import *  # noqa: F401,F403
 from .models_extra5 import *  # noqa: F401,F403
 from .models_extra6 import *  # noqa: F401,F403
+from .models_wechat import *  # noqa: F401,F403

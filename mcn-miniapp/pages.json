@@ -1,0 +1,69 @@
+{
+  "pages": [
+    { "path": "pages/login/index", "style": { "navigationBarTitleText": "登录", "navigationStyle": "custom" } },
+    { "path": "pages/login/phone", "style": { "navigationBarTitleText": "绑定手机号" } },
+    { "path": "pages/dashboard/index", "style": { "navigationBarTitleText": "数据驾驶舱", "enablePullDownRefresh": true } },
+    { "path": "pages/schedule/index", "style": { "navigationBarTitleText": "我的排班", "enablePullDownRefresh": true } },
+    { "path": "pages/attendance/index", "style": { "navigationBarTitleText": "考勤打卡" } },
+    { "path": "pages/profile/index", "style": { "navigationBarTitleText": "我的" } },
+    { "path": "pages/sessions/index", "style": { "navigationBarTitleText": "直播记录", "enablePullDownRefresh": true } },
+    { "path": "pages/sessions/detail", "style": { "navigationBarTitleText": "直播详情" } },
+    { "path": "pages/tasks/index", "style": { "navigationBarTitleText": "任务看板", "enablePullDownRefresh": true } },
+    { "path": "pages/notifications/index", "style": { "navigationBarTitleText": "消息中心", "enablePullDownRefresh": true } },
+    { "path": "pages/stream-plans/index", "style": { "navigationBarTitleText": "直播预告", "enablePullDownRefresh": true } },
+    { "path": "pages/stream-checklist/index", "style": { "navigationBarTitleText": "直播检查清单" } },
+    { "path": "pages/products/index", "style": { "navigationBarTitleText": "商品浏览", "enablePullDownRefresh": true } },
+    { "path": "pages/orders/index", "style": { "navigationBarTitleText": "订单管理", "enablePullDownRefresh": true } },
+    { "path": "pages/sales-targets/index", "style": { "navigationBarTitleText": "销售目标" } },
+    { "path": "pages/finance/index", "style": { "navigationBarTitleText": "财务概览" } },
+    { "path": "pages/team-chat/index", "style": { "navigationBarTitleText": "团队沟通" } },
+    { "path": "pages/knowledge/index", "style": { "navigationBarTitleText": "知识库", "enablePullDownRefresh": true } },
+    { "path": "pages/knowledge/detail", "style": { "navigationBarTitleText": "文档详情" } },
+    { "path": "pages/training/index", "style": { "navigationBarTitleText": "培训课程" } },
+    { "path": "pages/complaints/index", "style": { "navigationBarTitleText": "客户投诉", "enablePullDownRefresh": true } },
+    { "path": "pages/expenses/index", "style": { "navigationBarTitleText": "费用报销" } },
+    { "path": "pages/performance/index", "style": { "navigationBarTitleText": "绩效考核" } },
+    { "path": "pages/leave/index", "style": { "navigationBarTitleText": "请假申请" } },
+    { "path": "pages/settings/index", "style": { "navigationBarTitleText": "设置" } }
+  ],
+  "globalStyle": {
+    "navigationBarBackgroundColor": "#0a0e27",
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "MCN管家",
+    "backgroundColor": "#0a0e27",
+    "backgroundTextStyle": "light",
+    "background": "#0a0e27"
+  },
+  "tabBar": {
+    "color": "#6b7393",
+    "selectedColor": "#7c5cff",
+    "backgroundColor": "#0a0e27",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/dashboard/index",
+        "text": "首页",
+        "iconPath": "static/tab/home.png",
+        "selectedIconPath": "static/tab/home-active.png"
+      },
+      {
+        "pagePath": "pages/schedule/index",
+        "text": "排班",
+        "iconPath": "static/tab/calendar.png",
+        "selectedIconPath": "static/tab/calendar-active.png"
+      },
+      {
+        "pagePath": "pages/attendance/index",
+        "text": "打卡",
+        "iconPath": "static/tab/clock.png",
+        "selectedIconPath": "static/tab/clock-active.png"
+      },
+      {
+        "pagePath": "pages/profile/index",
+        "text": "我的",
+        "iconPath": "static/tab/user.png",
+        "selectedIconPath": "static/tab/user-active.png"
+      }
+    ]
+  }
+}
