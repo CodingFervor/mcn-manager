@@ -61,6 +61,15 @@ from .views_extra6 import (
     QualityCheckViewSet, WorkflowAutomationViewSet, VendorRatingViewSet,
     StockAlertViewSet, SLAManagementViewSet, FeedbackSystemViewSet,
 )
+from .views_enterprise import (
+    SystemAnnouncementViewSet, PermissionPolicyViewSet, AuditLogViewSet,
+    DataBackupViewSet, HealthMonitorViewSet, IntegrationConfigViewSet,
+    WorkflowTemplateViewSet, NotificationTemplateViewSet, ReportSchedulerViewSet,
+    ExportCenterViewSet, WhiteLabelConfigViewSet, MultiTenantConfigViewSet,
+    LicenseManagementViewSet, RiskAssessmentViewSet, DisasterRecoveryViewSet,
+    ComplianceAuditViewSet, SystemConfigViewSet, FeatureFlagViewSet,
+    ApiKeyManagementViewSet, DeploymentRecordViewSet,
+)
 
 router = DefaultRouter()
 # 原有
@@ -202,6 +211,27 @@ router.register(r'vendor-ratings', VendorRatingViewSet)
 router.register(r'stock-alerts', StockAlertViewSet)
 router.register(r'sla', SLAManagementViewSet)
 router.register(r'feedbacks', FeedbackSystemViewSet)
+# 第六轮 20 企业级功能
+router.register(r'system-announcements', SystemAnnouncementViewSet)
+router.register(r'permission-policies', PermissionPolicyViewSet)
+router.register(r'audit-logs', AuditLogViewSet)
+router.register(r'data-backups', DataBackupViewSet)
+router.register(r'health-monitors', HealthMonitorViewSet)
+router.register(r'integration-configs', IntegrationConfigViewSet)
+router.register(r'workflow-templates', WorkflowTemplateViewSet)
+router.register(r'notification-templates', NotificationTemplateViewSet)
+router.register(r'report-schedulers', ReportSchedulerViewSet)
+router.register(r'export-center', ExportCenterViewSet)
+router.register(r'white-label-configs', WhiteLabelConfigViewSet)
+router.register(r'multi-tenant-configs', MultiTenantConfigViewSet)
+router.register(r'licenses', LicenseManagementViewSet)
+router.register(r'risk-assessments', RiskAssessmentViewSet)
+router.register(r'disaster-recovery', DisasterRecoveryViewSet)
+router.register(r'compliance-audits', ComplianceAuditViewSet)
+router.register(r'system-configs', SystemConfigViewSet)
+router.register(r'feature-flags', FeatureFlagViewSet)
+router.register(r'api-keys', ApiKeyManagementViewSet)
+router.register(r'deployments', DeploymentRecordViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

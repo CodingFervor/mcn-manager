@@ -117,6 +117,27 @@ const routes = [
   { path: '/stock-alerts', name: 'stock-alerts', component: () => import('../views/StockAlerts.vue'), meta: { title: '库存预警' } },
   { path: '/sla', name: 'sla', component: () => import('../views/SLA.vue'), meta: { title: 'SLA管理' } },
   { path: '/feedbacks', name: 'feedbacks', component: () => import('../views/Feedbacks.vue'), meta: { title: '反馈系统' } },
+  // 企业级功能
+  { path: '/system-announcements', name: 'system-announcements', component: () => import('../views/SystemAnnouncements.vue'), meta: { title: '系统公告' } },
+  { path: '/permission-policies', name: 'permission-policies', component: () => import('../views/PermissionPolicies.vue'), meta: { title: '权限策略' } },
+  { path: '/audit-logs', name: 'audit-logs', component: () => import('../views/AuditLogs.vue'), meta: { title: '审计日志' } },
+  { path: '/data-backups', name: 'data-backups', component: () => import('../views/DataBackups.vue'), meta: { title: '数据备份' } },
+  { path: '/health-monitors', name: 'health-monitors', component: () => import('../views/HealthMonitors.vue'), meta: { title: '系统监控' } },
+  { path: '/integration-configs', name: 'integration-configs', component: () => import('../views/IntegrationConfigs.vue'), meta: { title: '集成配置' } },
+  { path: '/workflow-templates', name: 'workflow-templates', component: () => import('../views/WorkflowTemplates.vue'), meta: { title: '工作流模板' } },
+  { path: '/notification-templates', name: 'notification-templates', component: () => import('../views/NotificationTemplates.vue'), meta: { title: '通知模板' } },
+  { path: '/report-schedulers', name: 'report-schedulers', component: () => import('../views/ReportSchedulers.vue'), meta: { title: '报表计划' } },
+  { path: '/export-center', name: 'export-center', component: () => import('../views/ExportCenter.vue'), meta: { title: '导出中心' } },
+  { path: '/white-label-configs', name: 'white-label-configs', component: () => import('../views/WhiteLabelConfigs.vue'), meta: { title: '白标配置' } },
+  { path: '/multi-tenant-configs', name: 'multi-tenant-configs', component: () => import('../views/MultiTenantConfigs.vue'), meta: { title: '多租户配置' } },
+  { path: '/license-management', name: 'license-management', component: () => import('../views/LicenseManagement.vue'), meta: { title: '许可证管理' } },
+  { path: '/risk-assessments', name: 'risk-assessments', component: () => import('../views/RiskAssessments.vue'), meta: { title: '风险评估' } },
+  { path: '/disaster-recoveries', name: 'disaster-recoveries', component: () => import('../views/DisasterRecoveries.vue'), meta: { title: '灾备管理' } },
+  { path: '/compliance-audits', name: 'compliance-audits', component: () => import('../views/ComplianceAudits.vue'), meta: { title: '合规审计' } },
+  { path: '/system-configs', name: 'system-configs', component: () => import('../views/SystemConfigs.vue'), meta: { title: '系统配置' } },
+  { path: '/feature-flags', name: 'feature-flags', component: () => import('../views/FeatureFlags.vue'), meta: { title: '功能开关' } },
+  { path: '/api-key-managements', name: 'api-key-managements', component: () => import('../views/ApiKeyManagements.vue'), meta: { title: 'API密钥' } },
+  { path: '/deployment-records', name: 'deployment-records', component: () => import('../views/DeploymentRecords.vue'), meta: { title: '部署记录' } },
 ]
 
 const router = createRouter({

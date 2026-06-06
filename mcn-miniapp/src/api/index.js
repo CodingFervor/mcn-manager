@@ -122,3 +122,71 @@ export const GiftAPI = {
 export const CommissionAPI = {
   list: (params) => http.get('/commissions/', params),
 }
+
+// Enterprise APIs
+export const SystemAnnouncementAPI = {
+  list: (params) => http.get('/system-announcements/', params),
+  create: (data) => http.post('/system-announcements/', data),
+}
+export const PermissionPolicyAPI = {
+  list: (params) => http.get('/permission-policies/', params),
+}
+export const AuditLogAPI = {
+  list: (params) => http.get('/audit-logs/', params),
+}
+export const DataBackupAPI = {
+  list: (params) => http.get('/data-backups/', params),
+  run: (id) => http.post(`/data-backups/${id}/run_backup/`),
+}
+export const HealthMonitorAPI = {
+  list: (params) => http.get('/health-monitors/', params),
+  check: (id) => http.post(`/health-monitors/${id}/check_health/`),
+}
+export const IntegrationConfigAPI = {
+  list: (params) => http.get('/integration-configs/', params),
+}
+export const WorkflowTemplateAPI = {
+  list: (params) => http.get('/workflow-templates/', params),
+}
+export const NotificationTemplateAPI = {
+  list: (params) => http.get('/notification-templates/', params),
+}
+export const ReportSchedulerAPI = {
+  list: (params) => http.get('/report-schedulers/', params),
+}
+export const ExportCenterAPI = {
+  list: (params) => http.get('/export-center/', params),
+  start: (data) => http.post('/export-center/start_export/', data),
+}
+export const WhiteLabelConfigAPI = {
+  list: (params) => http.get('/white-label-configs/', params),
+}
+export const MultiTenantConfigAPI = {
+  list: (params) => http.get('/multi-tenant-configs/', params),
+}
+export const LicenseManagementAPI = {
+  list: (params) => http.get('/license-management/', params),
+}
+export const RiskAssessmentAPI = {
+  list: (params) => http.get('/risk-assessments/', params),
+}
+export const DisasterRecoveryAPI = {
+  list: (params) => http.get('/disaster-recoveries/', params),
+}
+export const ComplianceAuditAPI = {
+  list: (params) => http.get('/compliance-audits/', params),
+}
+export const SystemConfigAPI = {
+  list: (params) => http.get('/system-configs/', params),
+  update: (id, data) => http.put(`/system-configs/${id}/`, data),
+}
+export const FeatureFlagAPI = {
+  list: (params) => http.get('/feature-flags/', params),
+  update: (id, data) => http.put(`/feature-flags/${id}/`, data),
+}
+export const ApiKeyManagementAPI = {
+  list: (params) => http.get('/api-key-managements/', params),
+}
+export const DeploymentRecordAPI = {
+  list: (params) => http.get('/deployment-records/', params),
+}

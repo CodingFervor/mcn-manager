@@ -69,7 +69,7 @@
 | Performance Review | Reviews | S/A/B/C/D grading / Auto-calculation / Bonus |
 | Shift Config | Shifts | Card view / 5 shift types / Custom time ranges |
 
-### 🚀 Extended Features (52 Modules)
+### 🚀 Extended Features (72 Modules)
 
 | Category | Modules |
 |----------|---------|
@@ -82,6 +82,10 @@
 | **Monitoring** | Stream Alerts, Compliance Review, Public Opinion, Data Warnings, Return Analysis |
 | **Collaboration** | Task Board, Notifications, Knowledge Base, Customer Complaints, After-Sales, AB Testing |
 | **Administration** | Roles & Permissions, Operation Logs, Data Reports, Data Export, Billboard |
+| **Enterprise** | System Announcements, Permission Policies, Audit Logs, Data Backups, Health Monitoring |
+| **DevOps** | Integration Config, Workflow Templates, Report Scheduler, Export Center, Deployment Records |
+| **Security** | White Label, Multi-Tenant, License Management, Risk Assessment, Disaster Recovery, Compliance Audit |
+| **Config** | System Config, Feature Flags, API Key Management, Notification Templates |
 
 ---
 
@@ -89,9 +93,9 @@
 
 ```
 ┌──────────────────────────────────────────────────┐
-│                 Frontend Layer                     │
-│   Vue 3 · Element Plus · ECharts · Pinia · Router │
-│          Vite Build · Tree-shaking · Code-split   │
+│              Multi-Platform Frontend               │
+│  Web (Vue 3 + Element Plus) · Mini Program (uni-app)  │
+│  PWA · Android (Capacitor) · 130 Pages Total      │
 ├──────────────────────────────────────────────────┤
 │                 Gateway Layer                      │
 │        Vite Proxy · Waitress · Django WSGI        │
@@ -106,7 +110,7 @@
 │   Anomaly Detect · Insights · Smart Match         │
 ├──────────────────────────────────────────────────┤
 │                  Data Layer                        │
-│   83 Models · 20+ Indexes · select_related         │
+│   154 Models · 20+ Indexes · select_related       │
 │   SQLite WAL · 64MB Cache · 256MB mmap            │
 └──────────────────────────────────────────────────┘
 ```

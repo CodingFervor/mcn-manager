@@ -1,6 +1,6 @@
 # Feature Screenshots
 
-> MCN Manager — 60 pages across 8 business modules. All screenshots captured from running system with sample data.
+> MCN Manager — 130 pages across 10 business modules. All screenshots captured from running system with sample data.
 
 ---
 
@@ -142,3 +142,37 @@ All pages adapt to mobile screens with:
 | Products | Schedules | Attendance | Sessions | Scripts |
 |----------|-----------|------------|----------|---------|
 | ![Products Mobile](screenshots/products-mobile.png) | ![Schedules Mobile](screenshots/schedules-mobile.png) | ![Attendance Mobile](screenshots/attendance-mobile.png) | ![Sessions Mobile](screenshots/sessions-mobile.png) | ![Scripts Mobile](screenshots/scripts-mobile.png) |
+
+---
+
+## Enterprise Features (20 New Pages)
+
+### System Management
+
+| System Announcements | Permission Policies | Audit Logs | Data Backups |
+|---------------------|--------------------|------------|--------------|
+| ![Announcements](screenshots/enterprise/system-announcements.png) | ![Permissions](screenshots/enterprise/permission-policies.png) | ![Audit Logs](screenshots/enterprise/audit-logs.png) | ![Backups](screenshots/enterprise/data-backups.png) |
+
+### Infrastructure
+
+| Health Monitor | Integration Config | Workflow Templates | Notification Templates |
+|---------------|-------------------|-------------------|----------------------|
+| ![Health](screenshots/enterprise/health-monitors.png) | ![Integrations](screenshots/enterprise/integration-configs.png) | ![Workflows](screenshots/enterprise/workflow-templates.png) | ![Templates](screenshots/enterprise/notification-templates.png) |
+
+### Automation & Export
+
+| Report Scheduler | Export Center | White Label | Multi-Tenant |
+|-----------------|---------------|-------------|-------------|
+| ![Reports](screenshots/enterprise/report-schedulers.png) | ![Exports](screenshots/enterprise/export-center.png) | ![White Label](screenshots/enterprise/white-label-configs.png) | ![Multi-Tenant](screenshots/enterprise/multi-tenant-configs.png) |
+
+### Security & Compliance
+
+| License Management | Risk Assessment | Disaster Recovery | Compliance Audit |
+|-------------------|----------------|-------------------|-----------------|
+| ![Licenses](screenshots/enterprise/license-management.png) | ![Risks](screenshots/enterprise/risk-assessments.png) | ![DR](screenshots/enterprise/disaster-recoveries.png) | ![Compliance](screenshots/enterprise/compliance-audits.png) |
+
+### DevOps & Configuration
+
+| System Config | Feature Flags | API Keys | Deployment Records |
+|--------------|--------------|----------|-------------------|
+| ![Config](screenshots/enterprise/system-configs.png) | ![Flags](screenshots/enterprise/feature-flags.png) | ![API Keys](screenshots/enterprise/api-key-managements.png) | ![Deployments](screenshots/enterprise/deployment-records.png) |

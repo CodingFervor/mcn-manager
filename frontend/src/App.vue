@@ -14,7 +14,13 @@ import {
   View, TrendCharts, Avatar, Aim, AlarmClock,
   List, Van, Grid, RefreshLeft, WalletFilled, Fold,
   CircleCheck, VideoPlay, Link, CopyDocument, PictureFilled,
-  ShoppingCart, CreditCard, Message, Share, Checked, Lock as Shield, ChatLineSquare as Comment
+  ShoppingCart, CreditCard, Message, Share, Checked, Lock as Shield, ChatLineSquare as Comment,
+  Notification, Tools, DocumentCopy, Upload, Monitor as HeartMonitor,
+  Position, Operation, Bell as BellTemplate, Timer as ReportTimer,
+  Download, Brush as WhiteLabelBrush, House as TenantHouse,
+  Key as LicenseKey, Warning as RiskWarning, RefreshLeft as DRRecovery,
+  CircleCheck as AuditCheck, Setting as SysSetting,
+  Open, Key as ApiKey, Upload as DeployUpload
 } from '@element-plus/icons-vue'
 
 const router = useRouter()
@@ -137,6 +143,27 @@ const menuItems = [
   { index: 'stock-alerts', label: '库存预警', icon: AlarmClock },
   { index: 'sla', label: 'SLA管理', icon: Shield },
   { index: 'feedbacks', label: '反馈系统', icon: Comment },
+  // 企业级功能
+  { index: 'system-announcements', label: '系统公告', icon: Notification },
+  { index: 'permission-policies', label: '权限策略', icon: Lock },
+  { index: 'audit-logs', label: '审计日志', icon: DocumentCopy },
+  { index: 'data-backups', label: '数据备份', icon: Upload },
+  { index: 'health-monitors', label: '系统监控', icon: Monitor },
+  { index: 'integration-configs', label: '集成配置', icon: Position },
+  { index: 'workflow-templates', label: '工作流模板', icon: Operation },
+  { index: 'notification-templates', label: '通知模板', icon: BellTemplate },
+  { index: 'report-schedulers', label: '报表计划', icon: ReportTimer },
+  { index: 'export-center', label: '导出中心', icon: Download },
+  { index: 'white-label-configs', label: '白标配置', icon: WhiteLabelBrush },
+  { index: 'multi-tenant-configs', label: '多租户配置', icon: TenantHouse },
+  { index: 'license-management', label: '许可证管理', icon: LicenseKey },
+  { index: 'risk-assessments', label: '风险评估', icon: RiskWarning },
+  { index: 'disaster-recoveries', label: '灾备管理', icon: DRRecovery },
+  { index: 'compliance-audits', label: '合规审计', icon: AuditCheck },
+  { index: 'system-configs', label: '系统配置', icon: SysSetting },
+  { index: 'feature-flags', label: '功能开关', icon: Open },
+  { index: 'api-key-managements', label: 'API密钥', icon: ApiKey },
+  { index: 'deployment-records', label: '部署记录', icon: DeployUpload },
 ]
 
 const navigate = (key) => {
